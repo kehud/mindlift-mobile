@@ -1,0 +1,183 @@
+/*
+ * MindLift design tokens
+ * Dark is the default theme. Light can be enabled with a .light class or
+ * data-theme="light" on html/body when app-level theme control is added.
+ */
+
+:root {
+  color-scheme: dark;
+
+  /* Backgrounds */
+  --ml-app-background: #0d0d10;
+  --ml-app-background-rgb: 13, 13, 16;
+  --ml-app-background-soft: #141316;
+  --ml-app-background-elevated: #19171b;
+  --ml-app-background-gradient: linear-gradient(180deg, #171416 0%, #0d0d10 56%, #09090b 100%);
+  --ml-app-background-gradient-soft: linear-gradient(145deg, rgba(169, 84, 80, 0.12), rgba(255, 255, 255, 0.03) 42%, rgba(13, 13, 16, 0));
+
+  /* Surfaces */
+  --ml-surface: #17161a;
+  --ml-surface-raised: #201e23;
+  --ml-surface-soft: #252329;
+  --ml-surface-glass: rgba(255, 255, 255, 0.06);
+  --ml-surface-glass-strong: rgba(255, 255, 255, 0.1);
+  --ml-surface-glass-border: rgba(255, 255, 255, 0.12);
+
+  /* Text */
+  --ml-text-primary: #f4f1ed;
+  --ml-text-secondary: #b9b1aa;
+  --ml-text-muted: #817a74;
+  --ml-text-inverse: #151316;
+
+  /* Accent */
+  --ml-accent: #a95450;
+  --ml-accent-rgb: 169, 84, 80;
+  --ml-accent-contrast: #ffffff;
+  --ml-accent-soft: rgba(169, 84, 80, 0.16);
+  --ml-accent-muted: #7d4442;
+  --ml-accent-strong: #bf6a64;
+
+  /* Borders and dividers */
+  --ml-border-subtle: rgba(255, 255, 255, 0.08);
+  --ml-border-strong: rgba(255, 255, 255, 0.16);
+  --ml-divider: rgba(255, 255, 255, 0.1);
+
+  /* Shadows */
+  --ml-shadow-soft: 0 18px 48px rgba(0, 0, 0, 0.28);
+  --ml-shadow-raised: 0 24px 64px rgba(0, 0, 0, 0.36);
+  --ml-shadow-focus: 0 0 0 3px rgba(169, 84, 80, 0.22);
+
+  /* Radius */
+  --ml-radius-xs: 4px;
+  --ml-radius-sm: 8px;
+  --ml-radius-md: 12px;
+  --ml-radius-lg: 16px;
+  --ml-radius-xl: 24px;
+  --ml-radius-pill: 999px;
+
+  /* Spacing */
+  --ml-space-0: 0;
+  --ml-space-1: 4px;
+  --ml-space-2: 8px;
+  --ml-space-3: 12px;
+  --ml-space-4: 16px;
+  --ml-space-5: 20px;
+  --ml-space-6: 24px;
+  --ml-space-7: 32px;
+  --ml-space-8: 40px;
+  --ml-space-9: 48px;
+  --ml-space-10: 64px;
+
+  /* Safe-area helpers */
+  --ml-safe-top: env(safe-area-inset-top, 0px);
+  --ml-safe-right: env(safe-area-inset-right, 0px);
+  --ml-safe-bottom: env(safe-area-inset-bottom, 0px);
+  --ml-safe-left: env(safe-area-inset-left, 0px);
+  --ml-page-padding-inline: var(--ml-space-5);
+  --ml-page-padding-block: var(--ml-space-5);
+  --ml-page-padding-top-safe: calc(var(--ml-page-padding-block) + var(--ml-safe-top));
+  --ml-page-padding-bottom-safe: calc(var(--ml-page-padding-block) + var(--ml-safe-bottom));
+  --ml-page-padding-inline-start-safe: calc(var(--ml-page-padding-inline) + var(--ml-safe-left));
+  --ml-page-padding-inline-end-safe: calc(var(--ml-page-padding-inline) + var(--ml-safe-right));
+
+  /* Ionic mapping */
+  --ion-font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --ion-background-color: var(--ml-app-background);
+  --ion-background-color-rgb: var(--ml-app-background-rgb);
+  --ion-text-color: var(--ml-text-primary);
+  --ion-text-color-rgb: 244, 241, 237;
+  --ion-border-color: var(--ml-border-subtle);
+  --ion-item-background: var(--ml-surface);
+  --ion-card-background: var(--ml-surface-raised);
+  --ion-toolbar-background: var(--ml-app-background);
+  --ion-tab-bar-background: var(--ml-app-background);
+
+  --ion-color-primary: var(--ml-accent);
+  --ion-color-primary-rgb: var(--ml-accent-rgb);
+  --ion-color-primary-contrast: var(--ml-accent-contrast);
+  --ion-color-primary-contrast-rgb: 255, 255, 255;
+  --ion-color-primary-shade: #954a46;
+  --ion-color-primary-tint: #b36561;
+
+  --ion-color-step-50: #19181b;
+  --ion-color-step-100: #252329;
+  --ion-color-step-150: #312f35;
+  --ion-color-step-200: #3d3940;
+  --ion-color-step-300: #575159;
+  --ion-color-step-400: #706970;
+  --ion-color-step-500: #8a8388;
+  --ion-color-step-600: #a49da1;
+  --ion-color-step-700: #beb8ba;
+  --ion-color-step-800: #d8d3d3;
+  --ion-color-step-900: #f4f1ed;
+}
+
+:root.light,
+:root[data-theme="light"],
+body.light,
+body[data-theme="light"] {
+  color-scheme: light;
+
+  --ml-app-background: #f7f7f5;
+  --ml-app-background-rgb: 247, 247, 245;
+  --ml-app-background-soft: #efefec;
+  --ml-app-background-elevated: #ffffff;
+  --ml-app-background-gradient: linear-gradient(180deg, #ffffff 0%, #f7f7f5 58%, #ededeb 100%);
+  --ml-app-background-gradient-soft: linear-gradient(145deg, rgba(155, 70, 67, 0.1), rgba(255, 255, 255, 0.7) 44%, rgba(247, 247, 245, 0));
+
+  --ml-surface: #ffffff;
+  --ml-surface-raised: #ffffff;
+  --ml-surface-soft: #eeeeeb;
+  --ml-surface-glass: rgba(255, 255, 255, 0.72);
+  --ml-surface-glass-strong: rgba(255, 255, 255, 0.88);
+  --ml-surface-glass-border: rgba(21, 19, 22, 0.1);
+
+  --ml-text-primary: #171518;
+  --ml-text-secondary: #5f5a57;
+  --ml-text-muted: #827b75;
+  --ml-text-inverse: #f8f6f3;
+
+  --ml-accent: #9b4643;
+  --ml-accent-rgb: 155, 70, 67;
+  --ml-accent-contrast: #ffffff;
+  --ml-accent-soft: rgba(155, 70, 67, 0.12);
+  --ml-accent-muted: #79413f;
+  --ml-accent-strong: #ad5a56;
+
+  --ml-border-subtle: rgba(21, 19, 22, 0.1);
+  --ml-border-strong: rgba(21, 19, 22, 0.18);
+  --ml-divider: rgba(21, 19, 22, 0.12);
+
+  --ml-shadow-soft: 0 18px 44px rgba(27, 25, 23, 0.08);
+  --ml-shadow-raised: 0 24px 60px rgba(27, 25, 23, 0.12);
+  --ml-shadow-focus: 0 0 0 3px rgba(155, 70, 67, 0.18);
+
+  --ion-background-color: var(--ml-app-background);
+  --ion-background-color-rgb: var(--ml-app-background-rgb);
+  --ion-text-color: var(--ml-text-primary);
+  --ion-text-color-rgb: 23, 21, 24;
+  --ion-border-color: var(--ml-border-subtle);
+  --ion-item-background: var(--ml-surface);
+  --ion-card-background: var(--ml-surface-raised);
+  --ion-toolbar-background: var(--ml-app-background);
+  --ion-tab-bar-background: var(--ml-app-background);
+
+  --ion-color-primary: var(--ml-accent);
+  --ion-color-primary-rgb: var(--ml-accent-rgb);
+  --ion-color-primary-contrast: var(--ml-accent-contrast);
+  --ion-color-primary-contrast-rgb: 255, 255, 255;
+  --ion-color-primary-shade: #883e3b;
+  --ion-color-primary-tint: #a55956;
+
+  --ion-color-step-50: #ededeb;
+  --ion-color-step-100: #e4e3e0;
+  --ion-color-step-150: #d8d6d2;
+  --ion-color-step-200: #cbc8c3;
+  --ion-color-step-300: #ada8a1;
+  --ion-color-step-400: #908982;
+  --ion-color-step-500: #746d68;
+  --ion-color-step-600: #5f5a57;
+  --ion-color-step-700: #494544;
+  --ion-color-step-800: #312f30;
+  --ion-color-step-900: #171518;
+}
