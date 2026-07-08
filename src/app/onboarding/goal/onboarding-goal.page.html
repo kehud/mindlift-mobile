@@ -1,0 +1,34 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Onboarding</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="onboarding-content">
+  <section class="onboarding-step">
+    <p class="eyebrow">Step 5 of 5</p>
+    <h1>Set your main goal</h1>
+    <p class="subtitle">Tell MindLift what you most want your workouts to support.</p>
+
+    <ion-list>
+      <ion-item>
+        <ion-textarea
+          label="Main goal"
+          labelPlacement="stacked"
+          name="mainGoal"
+          [autoGrow]="true"
+          required
+          [(ngModel)]="mainGoal"
+        ></ion-textarea>
+      </ion-item>
+    </ion-list>
+
+    <ion-text color="danger" *ngIf="errorMessage">
+      <p class="error-message">{{ errorMessage }}</p>
+    </ion-text>
+
+    <ion-button expand="block" [disabled]="!canSave" (click)="save()">
+      {{ saving ? 'Saving...' : 'Finish' }}
+    </ion-button>
+  </section>
+</ion-content>

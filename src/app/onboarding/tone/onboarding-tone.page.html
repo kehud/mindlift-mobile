@@ -1,0 +1,23 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Onboarding</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="onboarding-content">
+  <section class="onboarding-step">
+    <p class="eyebrow">Step 3 of 5</p>
+    <h1>Pick a coaching tone</h1>
+    <p class="subtitle">Choose how you want MindLift to talk to you during training.</p>
+
+    <ion-radio-group name="coachingTone" [(ngModel)]="coachingTone">
+      <ion-list>
+        <ion-item *ngFor="let option of toneOptions">
+          <ion-radio [value]="option.value" labelPlacement="end">{{ option.label }}</ion-radio>
+        </ion-item>
+      </ion-list>
+    </ion-radio-group>
+
+    <ion-button expand="block" [disabled]="!canContinue" (click)="continue()">Next</ion-button>
+  </section>
+</ion-content>

@@ -1,0 +1,26 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Onboarding</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="onboarding-content">
+  <section class="onboarding-step">
+    <p class="eyebrow">Step 4 of 5</p>
+    <h1>Select workout types</h1>
+    <p class="subtitle">Pick one or more ways you like to train.</p>
+
+    <ion-list>
+      <ion-item *ngFor="let option of workoutTypeOptions">
+        <ion-checkbox
+          [checked]="isWorkoutTypeSelected(option.value)"
+          (ionChange)="toggleWorkoutType(option.value, $event.detail.checked)"
+        >
+          {{ option.label }}
+        </ion-checkbox>
+      </ion-item>
+    </ion-list>
+
+    <ion-button expand="block" [disabled]="!canContinue" (click)="continue()">Next</ion-button>
+  </section>
+</ion-content>

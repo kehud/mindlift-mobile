@@ -1,0 +1,29 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Onboarding</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="onboarding-content">
+  <section class="onboarding-step">
+    <p class="eyebrow">Step 1 of 5</p>
+    <h1>Tell us about you</h1>
+    <p class="subtitle">What name should MindLift use during your workouts?</p>
+
+    <ion-list>
+      <ion-item>
+        <ion-input
+          label="Display name"
+          labelPlacement="stacked"
+          type="text"
+          name="displayName"
+          autocomplete="name"
+          required
+          [(ngModel)]="displayName"
+        ></ion-input>
+      </ion-item>
+    </ion-list>
+
+    <ion-button expand="block" [disabled]="!canContinue" (click)="continue()">Next</ion-button>
+  </section>
+</ion-content>

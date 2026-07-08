@@ -1,0 +1,23 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Onboarding</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="onboarding-content">
+  <section class="onboarding-step">
+    <p class="eyebrow">Step 2 of 5</p>
+    <h1>Choose your pronoun</h1>
+    <p class="subtitle">This helps MindLift keep coaching language personal.</p>
+
+    <ion-radio-group name="pronoun" [(ngModel)]="pronoun">
+      <ion-list>
+        <ion-item *ngFor="let option of pronounOptions">
+          <ion-radio [value]="option.value" labelPlacement="end">{{ option.label }}</ion-radio>
+        </ion-item>
+      </ion-list>
+    </ion-radio-group>
+
+    <ion-button expand="block" [disabled]="!canContinue" (click)="continue()">Next</ion-button>
+  </section>
+</ion-content>

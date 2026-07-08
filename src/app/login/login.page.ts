@@ -2,6 +2,7 @@ import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { AuthService } from '../core/auth/auth.service';
+import { OnboardingProfileService } from '../core/onboarding/onboarding-profile.service';
 
 type AuthAction = 'login' | 'register';
 
@@ -13,6 +14,7 @@ type AuthAction = 'login' | 'register';
 })
 export class LoginPage {
   private readonly authService = inject(AuthService);
+  private readonly onboardingProfileService = inject(OnboardingProfileService);
   private readonly router = inject(Router);
 
   loginEmail = '';
@@ -40,7 +42,11 @@ export class LoginPage {
 
     try {
       await authRequest();
-      await this.router.navigateByUrl('/home', { replaceUrl: true });
+      const nextUrl = action === 'register'
+        ? '/onboarding/about'
+        : await this.getPostLoginUrl();
+
+      await this.router.navigateByUrl(nextUrl, { replaceUrl: true });
     } catch {
       this.errorMessage = action === 'login'
         ? 'Unable to log in. Check your email and password, then try again.'
@@ -48,5 +54,11 @@ export class LoginPage {
     } finally {
       this.submittingAction = null;
     }
+  }
+
+  private async getPostLoginUrl(): Promise<string> {
+    const profile = await this.onboardingProfileService.loadProfile();
+
+    return profile?.completedAt ? '/home' : '/onboarding/about';
   }
 }
