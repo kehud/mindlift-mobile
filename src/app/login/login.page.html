@@ -6,7 +6,72 @@
 
 <ion-content [fullscreen]="true" class="ion-padding">
   <h1>Login</h1>
-  <p>MindLift login placeholder.</p>
 
-  <ion-button routerLink="/home">Continue to Home</ion-button>
+  <form (ngSubmit)="loginWithEmail()">
+    <ion-list>
+      <ion-item>
+        <ion-input
+          label="Email"
+          labelPlacement="stacked"
+          type="email"
+          name="loginEmail"
+          autocomplete="email"
+          required
+          [(ngModel)]="loginEmail"
+        ></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-input
+          label="Password"
+          labelPlacement="stacked"
+          type="password"
+          name="loginPassword"
+          autocomplete="current-password"
+          required
+          [(ngModel)]="loginPassword"
+        ></ion-input>
+      </ion-item>
+    </ion-list>
+
+    <ion-button type="submit" expand="block" [disabled]="submittingAction !== null">
+      {{ submittingAction === 'login' ? 'Logging in...' : 'Log in' }}
+    </ion-button>
+  </form>
+
+  <h2>Create Account</h2>
+
+  <form (ngSubmit)="registerWithEmail()">
+    <ion-list>
+      <ion-item>
+        <ion-input
+          label="Email"
+          labelPlacement="stacked"
+          type="email"
+          name="registerEmail"
+          autocomplete="email"
+          required
+          [(ngModel)]="registerEmail"
+        ></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-input
+          label="Password"
+          labelPlacement="stacked"
+          type="password"
+          name="registerPassword"
+          autocomplete="new-password"
+          required
+          [(ngModel)]="registerPassword"
+        ></ion-input>
+      </ion-item>
+    </ion-list>
+
+    <ion-button type="submit" expand="block" fill="outline" [disabled]="submittingAction !== null">
+      {{ submittingAction === 'register' ? 'Creating account...' : 'Register' }}
+    </ion-button>
+  </form>
+
+  <ion-text color="danger" *ngIf="errorMessage">
+    <p>{{ errorMessage }}</p>
+  </ion-text>
 </ion-content>

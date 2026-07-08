@@ -1,5 +1,5 @@
 import { DOCUMENT } from '@angular/common';
-import { Inject, Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 
 export type MindLiftLanguage = 'en' | 'he';
 export type MindLiftDirection = 'ltr' | 'rtl';
@@ -16,8 +16,7 @@ const DIRECTION_BY_LANGUAGE: Record<MindLiftLanguage, MindLiftDirection> = {
 })
 export class LanguageDirectionService {
   private currentLanguage: MindLiftLanguage = DEFAULT_LANGUAGE;
-
-  constructor(@Inject(DOCUMENT) private readonly document: Document) {}
+  private readonly document = inject(DOCUMENT);
 
   setLanguage(language: MindLiftLanguage): void {
     this.currentLanguage = language;

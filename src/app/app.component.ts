@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 
 import { LanguageDirectionService } from './core/i18n/language-direction.service';
 
@@ -9,7 +9,9 @@ import { LanguageDirectionService } from './core/i18n/language-direction.service
   standalone: false,
 })
 export class AppComponent {
-  constructor(private readonly languageDirection: LanguageDirectionService) {
+  private readonly languageDirection = inject(LanguageDirectionService);
+
+  constructor() {
     this.languageDirection.setLanguage(this.languageDirection.getCurrentLanguage());
   }
 }
