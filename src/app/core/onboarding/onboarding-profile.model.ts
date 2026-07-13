@@ -1,10 +1,12 @@
 import { FieldValue, Timestamp } from '@angular/fire/firestore';
 
+import { CoachingTone, WorkoutType } from '../workout-setup/workout-setup-options';
+
 export interface OnboardingProfile {
   displayName: string;
   pronoun: string;
-  coachingTone: string;
-  workoutTypes: string[];
+  coachingTone: CoachingTone;
+  workoutTypes: WorkoutType[];
   mainGoal: string;
   completedAt: Timestamp;
 }

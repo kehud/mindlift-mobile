@@ -6,8 +6,39 @@
 
 <ion-content [fullscreen]="true" class="ion-padding">
   <h1>Summary</h1>
-  <p>MindLift summary placeholder.</p>
 
-  <ion-button routerLink="/home">Back to Home</ion-button>
-  <ion-button routerLink="/history" fill="outline">View History</ion-button>
+  <ion-list *ngIf="session">
+    <ion-item>
+      <ion-label>
+        <h2>Workout type</h2>
+        <p>{{ session.workoutType }}</p>
+      </ion-label>
+    </ion-item>
+    <ion-item>
+      <ion-label>
+        <h2>Duration</h2>
+        <p>{{ session.durationMinutes }} minutes</p>
+      </ion-label>
+    </ion-item>
+    <ion-item>
+      <ion-label>
+        <h2>Coaching tone</h2>
+        <p>{{ session.coachingTone }}</p>
+      </ion-label>
+    </ion-item>
+    <ion-item>
+      <ion-label>
+        <h2>Main goal</h2>
+        <p>{{ session.mainGoal }}</p>
+      </ion-label>
+    </ion-item>
+    <ion-item>
+      <ion-label>
+        <h2>Status</h2>
+        <p>{{ session.status }}</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
+  <ion-button expand="block" [disabled]="!session" (click)="done()">Done</ion-button>
 </ion-content>

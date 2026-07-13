@@ -2,11 +2,10 @@ import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { OnboardingStateService } from '../../core/onboarding/onboarding-state.service';
-
-interface OnboardingOption {
-  value: string;
-  label: string;
-}
+import {
+  COACHING_TONE_OPTIONS,
+  CoachingTone,
+} from '../../core/workout-setup/workout-setup-options';
 
 @Component({
   selector: 'app-onboarding-tone',
@@ -18,21 +17,16 @@ export class OnboardingTonePage {
   private readonly onboardingState = inject(OnboardingStateService);
   private readonly router = inject(Router);
 
-  readonly toneOptions: OnboardingOption[] = [
-    { value: 'supportive', label: 'Supportive' },
-    { value: 'direct', label: 'Direct' },
-    { value: 'calm', label: 'Calm' },
-    { value: 'high-energy', label: 'High energy' },
-  ];
+  readonly toneOptions = COACHING_TONE_OPTIONS;
 
-  coachingTone = this.onboardingState.getSnapshot().coachingTone ?? '';
+  coachingTone: CoachingTone | null = this.onboardingState.getSnapshot().coachingTone;
 
   get canContinue(): boolean {
-    return this.coachingTone.length > 0;
+    return this.coachingTone !== null;
   }
 
   async continue(): Promise<void> {
-    if (!this.canContinue) {
+    if (this.coachingTone === null) {
       return;
     }
 

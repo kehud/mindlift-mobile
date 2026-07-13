@@ -2,11 +2,10 @@ import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { OnboardingStateService } from '../../core/onboarding/onboarding-state.service';
-
-interface OnboardingOption {
-  value: string;
-  label: string;
-}
+import {
+  WORKOUT_TYPE_OPTIONS,
+  WorkoutType,
+} from '../../core/workout-setup/workout-setup-options';
 
 @Component({
   selector: 'app-onboarding-workout-type',
@@ -18,12 +17,7 @@ export class OnboardingWorkoutTypePage {
   private readonly onboardingState = inject(OnboardingStateService);
   private readonly router = inject(Router);
 
-  readonly workoutTypeOptions: OnboardingOption[] = [
-    { value: 'strength', label: 'Strength' },
-    { value: 'cardio', label: 'Cardio' },
-    { value: 'mobility', label: 'Mobility' },
-    { value: 'yoga', label: 'Yoga' },
-  ];
+  readonly workoutTypeOptions = WORKOUT_TYPE_OPTIONS;
 
   workoutTypes = this.onboardingState.getSnapshot().workoutTypes;
 
@@ -31,11 +25,11 @@ export class OnboardingWorkoutTypePage {
     return this.workoutTypes.length > 0;
   }
 
-  isWorkoutTypeSelected(value: string): boolean {
+  isWorkoutTypeSelected(value: WorkoutType): boolean {
     return this.workoutTypes.includes(value);
   }
 
-  toggleWorkoutType(value: string, checked: boolean): void {
+  toggleWorkoutType(value: WorkoutType, checked: boolean): void {
     if (checked) {
       this.workoutTypes = this.isWorkoutTypeSelected(value)
         ? this.workoutTypes

@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 
+import { CoachingTone, WorkoutType } from '../workout-setup/workout-setup-options';
 import { SaveOnboardingProfileData } from './onboarding-profile.model';
 
 export interface OnboardingAnswers {
   displayName: string | null;
   pronoun: string | null;
-  coachingTone: string | null;
-  workoutTypes: string[];
+  coachingTone: CoachingTone | null;
+  workoutTypes: WorkoutType[];
   mainGoal: string | null;
 }
 
@@ -31,11 +32,11 @@ export class OnboardingStateService {
     this.answers.pronoun = pronoun;
   }
 
-  setCoachingTone(coachingTone: string): void {
+  setCoachingTone(coachingTone: CoachingTone): void {
     this.answers.coachingTone = coachingTone;
   }
 
-  setWorkoutTypes(workoutTypes: string[]): void {
+  setWorkoutTypes(workoutTypes: WorkoutType[]): void {
     this.answers.workoutTypes = [...workoutTypes];
   }
 

@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 
+import { onboardingCompleteGuard } from './core/onboarding/onboarding-complete.guard';
+
 const routes: Routes = [
   {
     path: 'splash',
@@ -16,26 +18,32 @@ const routes: Routes = [
   },
   {
     path: 'home',
+    canActivate: [onboardingCompleteGuard],
     loadChildren: () => import('./home/home.module').then((m) => m.HomePageModule)
   },
   {
     path: 'workout-setup',
+    canActivate: [onboardingCompleteGuard],
     loadChildren: () => import('./workout-setup/workout-setup.module').then((m) => m.WorkoutSetupPageModule)
   },
   {
     path: 'active-workout',
+    canActivate: [onboardingCompleteGuard],
     loadChildren: () => import('./active-workout/active-workout.module').then((m) => m.ActiveWorkoutPageModule)
   },
   {
     path: 'summary',
+    canActivate: [onboardingCompleteGuard],
     loadChildren: () => import('./summary/summary.module').then((m) => m.SummaryPageModule)
   },
   {
     path: 'history',
+    canActivate: [onboardingCompleteGuard],
     loadChildren: () => import('./history/history.module').then((m) => m.HistoryPageModule)
   },
   {
     path: 'profile-settings',
+    canActivate: [onboardingCompleteGuard],
     loadChildren: () => import('./profile-settings/profile-settings.module').then((m) => m.ProfileSettingsPageModule)
   },
   {
