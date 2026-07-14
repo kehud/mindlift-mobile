@@ -1,12 +1,17 @@
 import { inject, Injectable } from '@angular/core';
 
+import { LanguageDirectionService } from '../i18n/language-direction.service';
+import type { WorkoutTimeline } from '../workout-engine/models/workout-timeline.models';
+import { generateWorkoutTimeline } from '../workout-engine/workout-timeline-generator';
 import { WorkoutSetupStateService } from '../workout-setup/workout-setup-state.service';
-import { WorkoutSession } from './workout-session.model';
+import type { WorkoutSetup } from '../workout-setup/workout-setup.model';
+import type { WorkoutSession } from './workout-session.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class WorkoutSessionService {
+  private readonly languageDirection = inject(LanguageDirectionService);
   private readonly workoutSetupState = inject(WorkoutSetupStateService);
 
   private currentSession: WorkoutSession | null = null;
@@ -35,13 +40,15 @@ export class WorkoutSessionService {
     }
 
     const setup = this.workoutSetupState.getSnapshot();
+    const startedAt = new Date();
 
     this.currentSession = {
       workoutType: setup.workoutType!,
       durationMinutes: setup.durationMinutes!,
       coachingTone: setup.coachingTone!,
       mainGoal: setup.mainGoal!,
-      startedAt: new Date(),
+      timeline: this.generateTimelineFromSetup(setup, startedAt),
+      startedAt,
       status: 'active',
     };
 
@@ -63,5 +70,17 @@ export class WorkoutSessionService {
 
   clearSession(): void {
     this.currentSession = null;
+  }
+
+  private generateTimelineFromSetup(setup: WorkoutSetup, startedAt: Date): WorkoutTimeline {
+    return generateWorkoutTimeline({
+      workoutType: setup.workoutType!,
+      durationMinutes: setup.durationMinutes!,
+      plannedDurationSeconds: setup.durationMinutes! * 60,
+      coachingTone: setup.coachingTone!,
+      language: this.languageDirection.getCurrentLanguage(),
+      mainGoal: setup.mainGoal!,
+      createdAt: startedAt,
+    }, []);
   }
 }
