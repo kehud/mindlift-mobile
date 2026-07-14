@@ -1,6 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 
 import { LanguageDirectionService } from '../i18n/language-direction.service';
+import { WorkoutEngineService } from '../workout-engine/workout-engine.service';
 import type { WorkoutTimeline } from '../workout-engine/models/workout-timeline.models';
 import { generateWorkoutTimeline } from '../workout-engine/workout-timeline-generator';
 import { WorkoutSetupStateService } from '../workout-setup/workout-setup-state.service';
@@ -12,6 +13,7 @@ import type { WorkoutSession } from './workout-session.model';
 })
 export class WorkoutSessionService {
   private readonly languageDirection = inject(LanguageDirectionService);
+  private readonly workoutEngine = inject(WorkoutEngineService);
   private readonly workoutSetupState = inject(WorkoutSetupStateService);
 
   private currentSession: WorkoutSession | null = null;
@@ -24,6 +26,9 @@ export class WorkoutSessionService {
     return {
       ...this.currentSession,
       startedAt: new Date(this.currentSession.startedAt),
+      completedAt: this.currentSession.completedAt
+        ? new Date(this.currentSession.completedAt)
+        : null,
     };
   }
 
@@ -49,8 +54,14 @@ export class WorkoutSessionService {
       mainGoal: setup.mainGoal!,
       timeline: this.generateTimelineFromSetup(setup, startedAt),
       startedAt,
+      actualDurationSeconds: null,
+      completedAt: null,
+      completionReason: null,
       status: 'active',
     };
+
+    this.workoutEngine.initialize(this.currentSession.timeline);
+    this.workoutEngine.start();
 
     return this.getCurrentSession();
   }
@@ -60,8 +71,22 @@ export class WorkoutSessionService {
       return null;
     }
 
+    let engineSnapshot = this.workoutEngine.getSnapshot();
+
+    if (engineSnapshot?.status !== 'completed') {
+      this.workoutEngine.complete('ended_by_user');
+      engineSnapshot = this.workoutEngine.getSnapshot();
+    }
+
+    if (!engineSnapshot || engineSnapshot.status !== 'completed') {
+      return this.getCurrentSession();
+    }
+
     this.currentSession = {
       ...this.currentSession,
+      actualDurationSeconds: engineSnapshot.elapsedSeconds,
+      completedAt: engineSnapshot.completedAt,
+      completionReason: engineSnapshot.completionReason,
       status: 'completed',
     };
 
@@ -70,6 +95,7 @@ export class WorkoutSessionService {
 
   clearSession(): void {
     this.currentSession = null;
+    this.workoutEngine.reset();
   }
 
   private generateTimelineFromSetup(setup: WorkoutSetup, startedAt: Date): WorkoutTimeline {

@@ -18,6 +18,10 @@ export type WorkoutEngineRuntimeStatus =
   | 'cancelled'
   | 'error';
 
+export type WorkoutCompletionReason =
+  | 'timeline_completed'
+  | 'ended_by_user';
+
 export interface WorkoutEngineRuntime {
   timelineId: WorkoutTimelineId;
   timeline: WorkoutTimeline;
@@ -32,6 +36,7 @@ export interface WorkoutEngineRuntime {
   pausedAt: Date | null;
   resumedAt: Date | null;
   completedAt: Date | null;
+  completionReason: WorkoutCompletionReason | null;
   processedCueIds: readonly WorkoutCueId[];
   playedCueIds: readonly WorkoutCueId[];
   missedCueIds: readonly WorkoutCueId[];
@@ -46,6 +51,8 @@ export interface WorkoutEngineRuntimeSnapshot {
   currentCue: WorkoutCue | null;
   elapsedSeconds: number;
   remainingSeconds: number;
+  completedAt: Date | null;
+  completionReason: WorkoutCompletionReason | null;
   processedCueIds: readonly WorkoutCueId[];
   playedCueIds: readonly WorkoutCueId[];
   missedCueIds: readonly WorkoutCueId[];

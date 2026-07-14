@@ -231,6 +231,197 @@ describe('WorkoutEngineService', () => {
     cleanupTimers();
   }));
 
+  it('syncs a running engine immediately after background', fakeAsync(() => {
+    spyOn(window, 'setInterval').and.returnValue(1);
+    service.initialize(createTimeline([
+      createCue('background-cue', 5, 'opening-step'),
+    ]));
+    service.start();
+
+    tick(5000);
+    service.syncAfterBackground();
+
+    const snapshot = expectSnapshot();
+
+    expect(snapshot.elapsedSeconds).toBe(5);
+    expect(snapshot.remainingSeconds).toBe(115);
+    expect(snapshot.playedCueIds).toEqual(['background-cue']);
+    expect(snapshot.activeCueId).toBe('background-cue');
+    cleanupTimers();
+  }));
+
+  it('does not replay missed background cues in a burst', fakeAsync(() => {
+    spyOn(window, 'setInterval').and.returnValue(1);
+    service.initialize(createTimeline([
+      createCue('missed-cue-1', 2, 'opening-step'),
+      createCue('missed-cue-2', 3, 'opening-step'),
+      createCue('latest-cue', 4, 'opening-step'),
+    ]));
+    service.start();
+
+    tick(5000);
+    service.syncAfterBackground();
+
+    const snapshot = expectSnapshot();
+    const presentedEvents = service.cueEvents().filter((event) => event.type === 'cue-presented');
+
+    expect(snapshot.missedCueIds).toEqual(['missed-cue-1', 'missed-cue-2']);
+    expect(snapshot.playedCueIds).toEqual(['latest-cue']);
+    expect(presentedEvents.map((event) => event.cueId)).toEqual(['latest-cue']);
+    cleanupTimers();
+  }));
+
+  it('does not advance or process cues when syncing a paused engine', fakeAsync(() => {
+    const setIntervalSpy = spyOn(window, 'setInterval').and.returnValue(1);
+    service.initialize(createTimeline([
+      createCue('paused-background-cue', 2, 'opening-step'),
+    ]));
+    service.start();
+    service.pause();
+
+    tick(5000);
+    service.syncAfterBackground();
+
+    const snapshot = expectSnapshot();
+
+    expect(snapshot.status).toBe('paused');
+    expect(snapshot.elapsedSeconds).toBe(0);
+    expect(snapshot.processedCueIds).toEqual([]);
+    expect(service.cueEvents()).toEqual([]);
+    expect(setIntervalSpy.calls.count()).toBe(1);
+    cleanupTimers();
+  }));
+
+  it('repeated background sync does not duplicate cue processing or timers', fakeAsync(() => {
+    const setIntervalSpy = spyOn(window, 'setInterval').and.returnValue(1);
+    service.initialize(createTimeline([
+      createCue('single-background-cue', 2, 'opening-step'),
+    ]));
+    service.start();
+
+    tick(2000);
+    service.syncAfterBackground();
+    service.syncAfterBackground();
+
+    expect(setIntervalSpy.calls.count()).toBe(1);
+    expect(expectSnapshot().processedCueIds).toEqual(['single-background-cue']);
+    expect(service.cueEvents().filter((event) => event.type === 'cue-presented').length).toBe(1);
+    cleanupTimers();
+  }));
+
+  it('automatically completes when elapsed time reaches the Timeline duration', fakeAsync(() => {
+    service.initialize(createTimeline([], { totalDurationSeconds: 3 }));
+    service.start();
+
+    tick(3000);
+
+    const snapshot = expectSnapshot();
+
+    expect(snapshot.status).toBe('completed');
+    expect(snapshot.elapsedSeconds).toBe(3);
+    expect(snapshot.remainingSeconds).toBe(0);
+    expect(snapshot.completionReason).toBe('timeline_completed');
+    expect(snapshot.completedAt).not.toBeNull();
+    cleanupTimers();
+  }));
+
+  it('supports manual completion', fakeAsync(() => {
+    service.initialize(createTimeline());
+    service.start();
+    tick(2000);
+
+    service.complete('ended_by_user');
+
+    const snapshot = expectSnapshot();
+
+    expect(snapshot.status).toBe('completed');
+    expect(snapshot.elapsedSeconds).toBe(2);
+    expect(snapshot.remainingSeconds).toBe(118);
+    expect(snapshot.completionReason).toBe('ended_by_user');
+    expect(snapshot.completedAt).not.toBeNull();
+    cleanupTimers();
+  }));
+
+  it('completion stops the tick loop', fakeAsync(() => {
+    const clearIntervalSpy = spyOn(window, 'clearInterval').and.callThrough();
+    service.initialize(createTimeline());
+    service.start();
+
+    service.complete('ended_by_user');
+    tick(5000);
+
+    expect(clearIntervalSpy.calls.count()).toBe(1);
+    expect(expectSnapshot().elapsedSeconds).toBe(0);
+    cleanupTimers();
+  }));
+
+  it('does not process cues after completion', fakeAsync(() => {
+    service.initialize(createTimeline([
+      createCue('post-completion-cue', 2, 'opening-step'),
+    ]));
+    service.start();
+    service.complete('ended_by_user');
+
+    tick(5000);
+    service.syncAfterBackground();
+
+    expect(expectSnapshot().processedCueIds).toEqual([]);
+    expect(service.cueEvents()).toEqual([]);
+    cleanupTimers();
+  }));
+
+  it('repeated completion is a no-op', fakeAsync(() => {
+    service.initialize(createTimeline());
+    service.start();
+    tick(1000);
+    service.complete('ended_by_user');
+
+    const firstCompletion = expectSnapshot();
+
+    tick(2000);
+    service.complete('timeline_completed');
+
+    const repeatedCompletion = expectSnapshot();
+
+    expect(repeatedCompletion.completedAt).toBe(firstCompletion.completedAt);
+    expect(repeatedCompletion.completionReason).toBe('ended_by_user');
+    expect(repeatedCompletion.elapsedSeconds).toBe(firstCompletion.elapsedSeconds);
+    cleanupTimers();
+  }));
+
+  it('cannot restart or resume a completed engine', fakeAsync(() => {
+    const setIntervalSpy = spyOn(window, 'setInterval').and.callThrough();
+    service.initialize(createTimeline());
+    service.start();
+    service.complete('ended_by_user');
+
+    service.start();
+    service.resume();
+    service.syncAfterBackground();
+
+    expect(expectSnapshot().status).toBe('completed');
+    expect(setIntervalSpy.calls.count()).toBe(1);
+    cleanupTimers();
+  }));
+
+  it('background sync can complete a running workout', fakeAsync(() => {
+    const setIntervalSpy = spyOn(window, 'setInterval').and.returnValue(1);
+    service.initialize(createTimeline([], { totalDurationSeconds: 3 }));
+    service.start();
+
+    tick(3000);
+    service.syncAfterBackground();
+
+    const snapshot = expectSnapshot();
+
+    expect(snapshot.status).toBe('completed');
+    expect(snapshot.elapsedSeconds).toBe(3);
+    expect(snapshot.remainingSeconds).toBe(0);
+    expect(snapshot.completionReason).toBe('timeline_completed');
+    expect(setIntervalSpy.calls.count()).toBe(1);
+    cleanupTimers();
+  }));
+
   it('initialize clears a previous timer and runtime', fakeAsync(() => {
     const clearIntervalSpy = spyOn(window, 'clearInterval').and.callThrough();
 

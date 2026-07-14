@@ -5,6 +5,7 @@ import type {
   WorkoutCuePresentedEvent,
 } from './models/workout-engine-event.models';
 import type {
+  WorkoutCompletionReason,
   WorkoutEngineRuntime,
   WorkoutEngineRuntimeSnapshot,
 } from './models/workout-engine-runtime.models';
@@ -65,6 +66,7 @@ export class WorkoutEngineService implements OnDestroy {
       pausedAt: null,
       resumedAt: null,
       completedAt: null,
+      completionReason: null,
       processedCueIds: [],
       playedCueIds: [],
       missedCueIds: [],
@@ -143,6 +145,43 @@ export class WorkoutEngineService implements OnDestroy {
     return this.createSnapshot(this.runtimeState(), new Date());
   }
 
+  syncAfterBackground(): void {
+    const runtime = this.runtimeState();
+
+    if (!runtime || runtime.status !== 'running') {
+      return;
+    }
+
+    this.processTick();
+
+    if (this.runtimeState()?.status === 'running') {
+      this.startTicking();
+    }
+  }
+
+  complete(reason: WorkoutCompletionReason): void {
+    const runtime = this.runtimeState();
+
+    if (!runtime || runtime.status === 'completed') {
+      return;
+    }
+
+    const completedAt = new Date();
+    const elapsedSeconds = this.getElapsedSeconds(runtime, completedAt);
+
+    this.stopTicking();
+    this.runtimeState.set({
+      ...runtime,
+      status: 'completed',
+      elapsedSeconds,
+      remainingSeconds: this.getRemainingSeconds(runtime.timeline, elapsedSeconds),
+      pausedAt: null,
+      resumedAt: null,
+      completedAt,
+      completionReason: reason,
+    });
+  }
+
   reset(): void {
     this.stopTicking();
     this.cueEventsState.set([]);
@@ -179,6 +218,10 @@ export class WorkoutEngineService implements OnDestroy {
         ...this.cueEventsState(),
         ...cueProcessing.events,
       ]);
+    }
+
+    if (this.getRemainingSeconds(runtime.timeline, elapsedSeconds) === 0) {
+      this.complete('timeline_completed');
     }
   }
 
@@ -245,6 +288,8 @@ export class WorkoutEngineService implements OnDestroy {
       currentCue,
       elapsedSeconds,
       remainingSeconds: this.getRemainingSeconds(runtime.timeline, elapsedSeconds),
+      completedAt: runtime.completedAt,
+      completionReason: runtime.completionReason,
       processedCueIds: runtime.processedCueIds,
       playedCueIds: runtime.playedCueIds,
       missedCueIds: runtime.missedCueIds,
