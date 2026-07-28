@@ -1,9 +1,16 @@
+/// <reference types="@capacitor-firebase/authentication" />
+
 import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'com.mindlift.app',
+  appId: 'com.dev.mindlift.app',
   appName: 'MindLift',
-  webDir: 'www'
+  webDir: 'www',
+  plugins: {
+    FirebaseAuthentication: {
+      skipNativeAuth: false,
+    },
+  },
 };
 
 export default config;

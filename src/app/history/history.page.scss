@@ -1,3 +1,85 @@
+@use '../shared/ui-kit/primitives' as ui;
+
 :host {
   display: block;
+}
+
+.history-toolbar {
+  @include ui.premium-toolbar;
+}
+
+.history-toolbar ion-title {
+  @include ui.toolbar-title;
+}
+
+.history-content {
+  --background: var(--ml-app-background-gradient);
+}
+
+.history-shell {
+  @include ui.screen-shell(var(--ml-space-5), calc(108px + var(--ml-safe-bottom)));
+}
+
+.history-intro {
+  @include ui.page-intro;
+}
+
+.eyebrow {
+  @include ui.section-label;
+}
+
+.history-intro h1 {
+  @include ui.page-title;
+}
+
+.history-intro > p:last-child,
+.history-empty p {
+  @include ui.body-copy;
+}
+
+.history-empty {
+  @include ui.glass-card(18px);
+  @include ui.empty-state;
+}
+
+.history-empty__icon {
+  align-items: center;
+  background: var(--ml-accent-soft);
+  border-radius: 50%;
+  color: var(--ml-accent);
+  display: flex;
+  font-size: 1.55rem;
+  height: 64px;
+  justify-content: center;
+  width: 64px;
+}
+
+.history-empty__copy {
+  display: grid;
+  gap: var(--ml-space-2);
+}
+
+.history-empty h2 {
+  color: var(--ml-text-primary);
+  font-size: 1.22rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+  margin: 0;
+}
+
+.history-empty ion-button {
+  @include ui.primary-cta(0.9rem);
+  margin: var(--ml-space-1) 0 0;
+  width: min(100%, 240px);
+}
+
+.history-empty ion-button:active {
+  @include ui.pressed;
+}
+
+@media (max-height: 680px) {
+  .history-empty {
+    padding-block: var(--ml-space-5);
+  }
 }

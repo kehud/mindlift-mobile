@@ -1,12 +1,86 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>Profile Settings</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home" [text]="shellLabels.back"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ shellLabels.settings }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true" class="ion-padding">
-  <h1>Profile Settings</h1>
-  <p>MindLift profile settings placeholder.</p>
+<ion-content [fullscreen]="true" class="settings-content">
+  <main class="settings-shell">
+    <section class="settings-intro" aria-labelledby="settings-title">
+      <p class="eyebrow">YOUR SPACE</p>
+      <h1 id="settings-title">{{ shellLabels.settings }}</h1>
+      <p>Keep MindLift feeling comfortable and personal.</p>
+    </section>
 
-  <ion-button routerLink="/home">Back to Home</ion-button>
+    <section class="settings-card profile-card" aria-labelledby="profile-title">
+      <p class="section-label" id="profile-title">PROFILE</p>
+
+      <ng-container *ngIf="currentUser$ | async as user; else unavailableUser">
+        <div class="profile-row">
+          <div class="profile-avatar" aria-hidden="true">
+            {{ (user.displayName || user.email || 'M').slice(0, 1) | uppercase }}
+          </div>
+          <div class="profile-copy">
+            <h2>{{ user.displayName || 'MindLift member' }}</h2>
+            <p>{{ user.email || 'Signed in to MindLift' }}</p>
+          </div>
+        </div>
+      </ng-container>
+
+      <ng-template #unavailableUser>
+        <div class="profile-row">
+          <div class="profile-avatar" aria-hidden="true">M</div>
+          <div class="profile-copy">
+            <h2>MindLift member</h2>
+            <p>Your profile is loading.</p>
+          </div>
+        </div>
+      </ng-template>
+    </section>
+
+    <section class="settings-card" aria-labelledby="appearance-title">
+      <div class="section-heading">
+        <div>
+          <p class="section-label" id="appearance-title">APPEARANCE</p>
+          <h2>{{ shellLabels.theme }}</h2>
+        </div>
+        <p>Choose what feels best.</p>
+      </div>
+
+      <ion-segment
+        aria-label="Theme preference"
+        [value]="themePreference()"
+        (ionChange)="selectTheme($any($event.detail.value))"
+      >
+        <ion-segment-button value="system">
+          <ion-label>{{ shellLabels.system }}</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="light">
+          <ion-label>{{ shellLabels.light }}</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="dark">
+          <ion-label>{{ shellLabels.dark }}</ion-label>
+        </ion-segment-button>
+      </ion-segment>
+    </section>
+
+    <section class="settings-card account-card" aria-labelledby="account-title">
+      <p class="section-label" id="account-title">ACCOUNT</p>
+      <ion-button
+        expand="block"
+        fill="outline"
+        color="danger"
+        [disabled]="isLoggingOut"
+        (click)="logout()"
+      >
+        {{ isLoggingOut ? '…' : shellLabels.logout }}
+      </ion-button>
+      <p *ngIf="errorMessage" class="error-message" role="alert">{{ errorMessage }}</p>
+    </section>
+  </main>
 </ion-content>
+
+<app-floating-navigation></app-floating-navigation>

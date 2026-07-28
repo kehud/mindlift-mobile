@@ -1,12 +1,31 @@
 <ion-header [translucent]="true">
-  <ion-toolbar>
+  <ion-toolbar class="history-toolbar">
     <ion-title>History</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true" class="ion-padding">
-  <h1>History</h1>
-  <p>MindLift history placeholder.</p>
+<ion-content [fullscreen]="true" class="history-content">
+  <main class="history-shell">
+    <section class="history-intro" aria-labelledby="history-title">
+      <p class="eyebrow">YOUR PROGRESS</p>
+      <h1 id="history-title">Workout history</h1>
+      <p>Your completed sessions will collect here.</p>
+    </section>
 
-  <ion-button routerLink="/home">Back to Home</ion-button>
+    <section class="history-empty" aria-labelledby="empty-history-title">
+      <div class="history-empty__icon" aria-hidden="true">
+        <ion-icon name="pulse-outline"></ion-icon>
+      </div>
+      <div class="history-empty__copy">
+        <h2 id="empty-history-title">Your story starts with one session.</h2>
+        <p>When you finish a workout, the moments and momentum you build will be here.</p>
+      </div>
+      <ion-button routerLink="/workout-setup" expand="block">
+        Start a workout
+        <ion-icon name="arrow-forward" slot="end" aria-hidden="true"></ion-icon>
+      </ion-button>
+    </section>
+  </main>
 </ion-content>
+
+<app-floating-navigation></app-floating-navigation>

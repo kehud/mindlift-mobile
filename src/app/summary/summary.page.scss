@@ -1,14 +1,108 @@
+@use '../shared/ui-kit/primitives' as ui;
+
 :host {
   display: block;
 }
 
-ion-list {
-  margin-block: var(--ml-space-4);
-  padding: 0;
-  background: transparent;
+.summary-toolbar {
+  @include ui.premium-toolbar;
 }
 
-ion-item {
-  --background: var(--ml-surface);
-  --border-color: var(--ml-border-subtle);
+.summary-toolbar ion-title {
+  @include ui.toolbar-title;
+}
+
+.summary-content {
+  --background: var(--ml-app-background-gradient);
+}
+
+.summary-shell {
+  @include ui.screen-shell(var(--ml-space-5), var(--ml-page-padding-bottom-safe), 420px);
+}
+
+.summary-hero {
+  @include ui.page-intro;
+  display: grid;
+  gap: var(--ml-space-2);
+  justify-items: center;
+  padding-block-start: var(--ml-space-3);
+  text-align: center;
+}
+
+.completion-mark {
+  align-items: center;
+  background: radial-gradient(circle at 35% 28%, var(--ml-accent-strong), var(--ml-accent));
+  border: 1px solid color-mix(in srgb, var(--ml-accent-strong) 82%, transparent);
+  border-radius: 50%;
+  box-shadow: 0 12px 28px rgba(var(--ml-accent-rgb), 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.34);
+  color: var(--ml-accent-contrast);
+  display: flex;
+  font-size: 1.45rem;
+  height: 62px;
+  justify-content: center;
+  width: 62px;
+}
+
+.eyebrow {
+  @include ui.section-label(var(--ml-accent));
+}
+
+.summary-hero h1 {
+  @include ui.page-title;
+  margin-block: 0;
+}
+
+.summary-hero > p:last-child,
+.summary-note {
+  @include ui.body-copy;
+}
+
+.summary-stats {
+  @include ui.glass-card(18px);
+  overflow: hidden;
+}
+
+.summary-stat {
+  align-items: center;
+  border-block-end: 1px solid var(--ml-divider);
+  display: flex;
+  gap: var(--ml-space-4);
+  justify-content: space-between;
+  min-block-size: 54px;
+  padding-inline: var(--ml-space-4);
+}
+
+.summary-stat:last-child {
+  border-block-end: 0;
+}
+
+.summary-stat span {
+  color: var(--ml-text-secondary);
+  font-size: 0.84rem;
+}
+
+.summary-stat strong {
+  color: var(--ml-text-primary);
+  font-size: 0.9rem;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+  text-align: end;
+}
+
+.summary-note {
+  text-align: center;
+}
+
+.summary-done {
+  @include ui.primary-cta;
+  margin: 0;
+}
+
+.summary-done:active {
+  @include ui.pressed;
+}
+
+:host-context(:root[data-theme='light']) .completion-mark,
+:host-context(body[data-theme='light']) .completion-mark {
+  box-shadow: 0 10px 22px rgba(var(--ml-accent-rgb), 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.46);
 }

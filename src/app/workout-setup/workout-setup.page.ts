@@ -28,6 +28,15 @@ export class WorkoutSetupPage {
   durationMinutes: WorkoutDuration | null = null;
   coachingTone: CoachingTone | null = null;
   mainGoal: string | null = null;
+  activeSelector: 'workoutType' | 'duration' | null = null;
+
+  get workoutTypeLabel(): string {
+    return this.workoutTypeOptions.find((option) => option.value === this.workoutType)?.label ?? 'Choose';
+  }
+
+  get durationLabel(): string {
+    return this.durationOptions.find((option) => option.value === this.durationMinutes)?.label ?? 'Choose';
+  }
 
   get canContinue(): boolean {
     return this.workoutType !== null && this.durationMinutes !== null;
@@ -50,6 +59,14 @@ export class WorkoutSetupPage {
     this.workoutSetupState.setMainGoal(this.mainGoal);
 
     await this.router.navigateByUrl('/active-workout');
+  }
+
+  toggleSelector(selector: 'workoutType' | 'duration'): void {
+    this.activeSelector = this.activeSelector === selector ? null : selector;
+  }
+
+  closeSelector(): void {
+    this.activeSelector = null;
   }
 
   private applySetup(setup: WorkoutSetup): void {

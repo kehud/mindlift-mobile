@@ -1,44 +1,43 @@
 <ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>Summary</ion-title>
+  <ion-toolbar class="summary-toolbar">
+    <ion-title>WORKOUT COMPLETE</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true" class="ion-padding">
-  <h1>Summary</h1>
+<ion-content [fullscreen]="true" class="summary-content">
+  <main class="summary-shell" *ngIf="session as workout">
+    <section class="summary-hero" aria-labelledby="summary-title">
+      <div class="completion-mark" aria-hidden="true">
+        <ion-icon name="checkmark"></ion-icon>
+      </div>
+      <p class="eyebrow">MINDFLIFT</p>
+      <h1 id="summary-title">Workout complete.</h1>
+      <p>You showed up for yourself. That counts.</p>
+    </section>
 
-  <ion-list *ngIf="session">
-    <ion-item>
-      <ion-label>
-        <h2>Workout type</h2>
-        <p>{{ session.workoutType }}</p>
-      </ion-label>
-    </ion-item>
-    <ion-item>
-      <ion-label>
-        <h2>Duration</h2>
-        <p>{{ session.durationMinutes }} minutes</p>
-      </ion-label>
-    </ion-item>
-    <ion-item>
-      <ion-label>
-        <h2>Coaching tone</h2>
-        <p>{{ session.coachingTone }}</p>
-      </ion-label>
-    </ion-item>
-    <ion-item>
-      <ion-label>
-        <h2>Main goal</h2>
-        <p>{{ session.mainGoal }}</p>
-      </ion-label>
-    </ion-item>
-    <ion-item>
-      <ion-label>
-        <h2>Status</h2>
-        <p>{{ session.status }}</p>
-      </ion-label>
-    </ion-item>
-  </ion-list>
+    <section class="summary-stats" aria-label="Workout summary">
+      <div class="summary-stat">
+        <span>Duration</span>
+        <strong>{{ workout.durationMinutes }} min</strong>
+      </div>
+      <div class="summary-stat">
+        <span>Focus</span>
+        <strong>{{ workout.workoutType | titlecase }}</strong>
+      </div>
+      <div class="summary-stat">
+        <span>Coaching style</span>
+        <strong>{{ workout.coachingTone | titlecase }}</strong>
+      </div>
+      <div class="summary-stat">
+        <span>Intention</span>
+        <strong>{{ workout.mainGoal }}</strong>
+      </div>
+    </section>
 
-  <ion-button expand="block" [disabled]="!session" (click)="done()">Done</ion-button>
+    <p class="summary-note">Great work. Keep building the practice.</p>
+
+    <ion-button class="summary-done" expand="block" (click)="done()">
+      Done
+    </ion-button>
+  </main>
 </ion-content>

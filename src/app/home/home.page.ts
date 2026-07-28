@@ -7,7 +7,5 @@ import { Component } from '@angular/core';
   standalone: false,
 })
 export class HomePage {
-
-  constructor() {}
-
+  readonly shellLabels = { home: 'Home', settings: 'Settings' };
 }

@@ -11,9 +11,14 @@ export const onboardingCompleteGuard: CanActivateFn = (): Observable<boolean | U
   const onboardingProfileService = inject(OnboardingProfileService);
   const router = inject(Router);
 
-  return authService.currentUser$.pipe(
+  return authService.authInitializationComplete$.pipe(
     take(1),
+    switchMap(() => authService.currentUser$.pipe(take(1))),
     switchMap((user) => {
+      console.info('Onboarding guard evaluated after auth initialization.', {
+        authenticated: Boolean(user),
+      });
+
       if (!user) {
         return of(true);
       }

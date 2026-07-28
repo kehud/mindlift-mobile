@@ -1,77 +1,89 @@
 <ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>Login</ion-title>
+  <ion-toolbar class="auth-toolbar">
+    <ion-title>MINDFLIFT</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true" class="ion-padding">
-  <h1>Login</h1>
+<ion-content [fullscreen]="true" class="auth-content">
+  <main class="auth-shell">
+    <section class="auth-intro" aria-labelledby="login-title">
+      <p class="eyebrow">WELCOME BACK</p>
+      <h1 id="login-title">A clearer mind<br>starts here.</h1>
+      <p>Sign in to continue your practice.</p>
+    </section>
 
-  <form (ngSubmit)="loginWithEmail()">
-    <ion-list>
-      <ion-item>
-        <ion-input
-          label="Email"
-          labelPlacement="stacked"
-          type="email"
-          name="loginEmail"
-          autocomplete="email"
-          required
-          [(ngModel)]="loginEmail"
-        ></ion-input>
-      </ion-item>
-      <ion-item>
-        <ion-input
-          label="Password"
-          labelPlacement="stacked"
-          type="password"
-          name="loginPassword"
-          autocomplete="current-password"
-          required
-          [(ngModel)]="loginPassword"
-        ></ion-input>
-      </ion-item>
-    </ion-list>
+    <section class="auth-card" aria-label="Sign in">
+      <form #loginForm="ngForm" novalidate (ngSubmit)="onLoginFormSubmit(loginForm)">
+        <ion-item lines="none" class="auth-field">
+          <ion-icon name="mail-outline" slot="start" aria-hidden="true"></ion-icon>
+          <ion-input
+            aria-label="Email"
+            placeholder="Email address"
+            type="email"
+            name="loginEmail"
+            autocomplete="email"
+            required
+            [(ngModel)]="loginEmail"
+          ></ion-input>
+        </ion-item>
+        <ion-item lines="none" class="auth-field">
+          <ion-icon name="lock-closed-outline" slot="start" aria-hidden="true"></ion-icon>
+          <ion-input
+            aria-label="Password"
+            placeholder="Password"
+            type="password"
+            name="loginPassword"
+            autocomplete="current-password"
+            required
+            [(ngModel)]="loginPassword"
+          ></ion-input>
+        </ion-item>
 
-    <ion-button type="submit" expand="block" [disabled]="submittingAction !== null">
-      {{ submittingAction === 'login' ? 'Logging in...' : 'Log in' }}
-    </ion-button>
-  </form>
+        <ion-button type="button" expand="block" [disabled]="submittingAction !== null" (click)="onLoginButtonClick(loginForm)">
+          {{ submittingAction === 'login' ? 'Signing in…' : 'Continue with email' }}
+          <ion-icon name="arrow-forward" slot="end" aria-hidden="true"></ion-icon>
+        </ion-button>
+      </form>
+    </section>
 
-  <h2>Create Account</h2>
+    <details class="register-panel">
+      <summary>
+        <span>New to MindLift?</span>
+        <strong>Create an account</strong>
+      </summary>
 
-  <form (ngSubmit)="registerWithEmail()">
-    <ion-list>
-      <ion-item>
-        <ion-input
-          label="Email"
-          labelPlacement="stacked"
-          type="email"
-          name="registerEmail"
-          autocomplete="email"
-          required
-          [(ngModel)]="registerEmail"
-        ></ion-input>
-      </ion-item>
-      <ion-item>
-        <ion-input
-          label="Password"
-          labelPlacement="stacked"
-          type="password"
-          name="registerPassword"
-          autocomplete="new-password"
-          required
-          [(ngModel)]="registerPassword"
-        ></ion-input>
-      </ion-item>
-    </ion-list>
+      <form (ngSubmit)="registerWithEmail()">
+        <ion-item lines="none" class="auth-field">
+          <ion-icon name="mail-outline" slot="start" aria-hidden="true"></ion-icon>
+          <ion-input
+            aria-label="Registration email"
+            placeholder="Email address"
+            type="email"
+            name="registerEmail"
+            autocomplete="email"
+            required
+            [(ngModel)]="registerEmail"
+          ></ion-input>
+        </ion-item>
+        <ion-item lines="none" class="auth-field">
+          <ion-icon name="lock-closed-outline" slot="start" aria-hidden="true"></ion-icon>
+          <ion-input
+            aria-label="Create a password"
+            placeholder="Create a password"
+            type="password"
+            name="registerPassword"
+            autocomplete="new-password"
+            required
+            [(ngModel)]="registerPassword"
+          ></ion-input>
+        </ion-item>
 
-    <ion-button type="submit" expand="block" fill="outline" [disabled]="submittingAction !== null">
-      {{ submittingAction === 'register' ? 'Creating account...' : 'Register' }}
-    </ion-button>
-  </form>
+        <ion-button type="submit" expand="block" fill="outline" [disabled]="submittingAction !== null">
+          {{ submittingAction === 'register' ? 'Creating account…' : 'Create account' }}
+        </ion-button>
+      </form>
+    </details>
 
-  <ion-text color="danger" *ngIf="errorMessage">
-    <p>{{ errorMessage }}</p>
-  </ion-text>
+    <p class="auth-error" *ngIf="errorMessage" role="alert">{{ errorMessage }}</p>
+  </main>
 </ion-content>

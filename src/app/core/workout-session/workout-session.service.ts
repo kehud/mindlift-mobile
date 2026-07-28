@@ -1,6 +1,8 @@
-import { inject, Injectable } from '@angular/core';
+import { effect, inject, Injectable } from '@angular/core';
 
 import { LanguageDirectionService } from '../i18n/language-direction.service';
+import { WorkoutAudioAdapter } from '../workout-engine/workout-audio.adapter';
+import { WorkoutContentService } from '../workout-engine/workout-content.service';
 import { WorkoutEngineService } from '../workout-engine/workout-engine.service';
 import type { WorkoutTimeline } from '../workout-engine/models/workout-timeline.models';
 import { generateWorkoutTimeline } from '../workout-engine/workout-timeline-generator';
@@ -13,10 +15,42 @@ import type { WorkoutSession } from './workout-session.model';
 })
 export class WorkoutSessionService {
   private readonly languageDirection = inject(LanguageDirectionService);
+  private readonly workoutAudio = inject(WorkoutAudioAdapter);
+  private readonly workoutContent = inject(WorkoutContentService);
   private readonly workoutEngine = inject(WorkoutEngineService);
   private readonly workoutSetupState = inject(WorkoutSetupStateService);
 
   private currentSession: WorkoutSession | null = null;
+  private handledCueEventCount = 0;
+
+  private readonly presentedCueAudioEffect = effect(() => {
+    const cueEvents = this.workoutEngine.cueEvents();
+    const session = this.currentSession;
+
+    if (!session) {
+      return;
+    }
+
+    for (const event of cueEvents.slice(this.handledCueEventCount)) {
+      if (event.type !== 'cue-presented') {
+        continue;
+      }
+
+      const cue = session.timeline.cues.find((candidate) => candidate.id === event.cueId);
+
+      if (!cue) {
+        continue;
+      }
+
+      const audio = cue.audioId
+        ? session.timeline.audio.find((candidate) => candidate.id === cue.audioId)
+        : undefined;
+
+      this.workoutAudio.handlePresentedCue(cue, audio);
+    }
+
+    this.handledCueEventCount = cueEvents.length;
+  });
 
   getCurrentSession(): WorkoutSession | null {
     if (!this.currentSession) {
@@ -107,6 +141,6 @@ export class WorkoutSessionService {
       language: this.languageDirection.getCurrentLanguage(),
       mainGoal: setup.mainGoal!,
       createdAt: startedAt,
-    }, []);
+    }, this.workoutContent.getCueTemplates());
   }
 }

@@ -1,3 +1,127 @@
+@use '../shared/ui-kit/primitives' as ui;
+
 :host {
   display: block;
+}
+
+.auth-toolbar {
+  @include ui.premium-toolbar;
+}
+
+.auth-toolbar ion-title {
+  @include ui.toolbar-title(0.16em);
+}
+
+.auth-content {
+  --background: var(--ml-app-background-gradient);
+}
+
+.auth-shell {
+  @include ui.screen-shell(var(--ml-space-5), var(--ml-page-padding-bottom-safe), 420px);
+}
+
+.eyebrow {
+  @include ui.section-label(var(--ml-accent));
+}
+
+.auth-intro {
+  @include ui.page-intro;
+}
+
+.auth-intro h1 {
+  @include ui.page-title;
+}
+
+.auth-intro > p:last-child {
+  @include ui.body-copy;
+}
+
+.auth-card,
+.register-panel {
+  @include ui.glass-card(18px);
+}
+
+.auth-card {
+  padding: var(--ml-space-3);
+}
+
+.auth-card form,
+.register-panel form {
+  display: grid;
+  gap: var(--ml-space-3);
+}
+
+.auth-field {
+  @include ui.form-field;
+}
+
+.auth-field:focus-within {
+  @include ui.form-field-focused;
+}
+
+.auth-field ion-icon {
+  color: var(--ml-text-muted);
+  font-size: 1.05rem;
+  margin-inline-end: var(--ml-space-2);
+}
+
+.auth-field ion-input {
+  --placeholder-color: var(--ml-text-muted);
+  --placeholder-opacity: 1;
+  font-size: 0.94rem;
+}
+
+.auth-card ion-button {
+  @include ui.primary-cta;
+  margin: var(--ml-space-1) 0 0;
+}
+
+.auth-card ion-button:active,
+.register-panel ion-button:active {
+  @include ui.pressed;
+}
+
+.register-panel {
+  overflow: hidden;
+}
+
+.register-panel summary {
+  align-items: center;
+  color: var(--ml-text-secondary);
+  cursor: pointer;
+  display: flex;
+  font-size: 0.86rem;
+  justify-content: space-between;
+  list-style: none;
+  padding: var(--ml-space-4);
+}
+
+.register-panel summary::-webkit-details-marker {
+  display: none;
+}
+
+.register-panel summary strong {
+  color: var(--ml-accent);
+  font-weight: 700;
+}
+
+.register-panel[open] summary {
+  border-block-end: 1px solid var(--ml-border-subtle);
+}
+
+.register-panel form {
+  padding: var(--ml-space-3);
+}
+
+.register-panel ion-button {
+  @include ui.secondary-cta;
+  font-size: 0.92rem;
+}
+
+.auth-error {
+  color: var(--ion-color-danger);
+  font-size: 0.83rem;
+  line-height: 1.4;
+  margin: 0;
+  text-align: center;
 }

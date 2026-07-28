@@ -1,0 +1,166 @@
+// Shared MindLift visual primitives. These mixins deliberately consume the
+// existing design tokens so every screen inherits the active light or dark theme.
+
+@mixin premium-toolbar() {
+  --background: transparent;
+  --border-width: 0;
+  --color: var(--ml-text-primary);
+}
+
+@mixin toolbar-title($tracking: 0.15em) {
+  font-size: 0.71rem;
+  font-weight: 750;
+  letter-spacing: $tracking;
+}
+
+@mixin screen-shell($gap, $bottom-padding, $max-width: 460px) {
+  box-sizing: border-box;
+  align-content: start;
+  display: grid;
+  gap: $gap;
+  inline-size: min(100%, $max-width);
+  margin-inline: auto;
+  padding-block: var(--ml-space-5) $bottom-padding;
+  padding-inline: var(--ml-page-padding-inline-start-safe) var(--ml-page-padding-inline-end-safe);
+}
+
+@mixin page-intro() {
+  padding-block: var(--ml-space-1) var(--ml-space-2);
+}
+
+@mixin section-label($color: var(--ml-text-muted)) {
+  color: $color;
+  font-size: 0.68rem;
+  font-weight: 750;
+  letter-spacing: 0.12em;
+  line-height: 1.2;
+  margin: 0;
+}
+
+@mixin page-title() {
+  color: var(--ml-text-primary);
+  font-size: clamp(2rem, 8.5vw, 2.55rem);
+  font-weight: 720;
+  letter-spacing: -0.055em;
+  line-height: 1;
+  margin: var(--ml-space-2) 0 var(--ml-space-3);
+}
+
+@mixin body-copy() {
+  color: var(--ml-text-secondary);
+  font-size: 0.92rem;
+  line-height: 1.5;
+  margin: 0;
+}
+
+@mixin card-frame() {
+  border: 1px solid var(--ml-surface-glass-border);
+  border-radius: var(--ml-radius-lg);
+  box-shadow: var(--ml-shadow-soft);
+}
+
+@mixin glass-card($blur: 14px, $background: color-mix(in srgb, var(--ml-surface-glass) 94%, transparent)) {
+  @include card-frame;
+  backdrop-filter: blur($blur);
+  -webkit-backdrop-filter: blur($blur);
+  background: $background;
+}
+
+@mixin glass-item($blur: 14px, $background: color-mix(in srgb, var(--ml-surface-glass) 94%, transparent)) {
+  @include card-frame;
+  backdrop-filter: blur($blur);
+  -webkit-backdrop-filter: blur($blur);
+  --background: #{$background};
+}
+
+@mixin primary-cta($font-size: 0.92rem) {
+  --background: linear-gradient(135deg, var(--ml-accent), var(--ml-accent-strong));
+  --background-activated: var(--ml-accent-muted);
+  --border-radius: var(--ml-radius-md);
+  --box-shadow: 0 12px 24px rgba(var(--ml-accent-rgb), 0.22);
+  --color: var(--ml-accent-contrast);
+  --padding-bottom: 0;
+  --padding-top: 0;
+  font-size: $font-size;
+  font-weight: 700;
+  letter-spacing: 0;
+  min-height: 52px;
+  text-transform: none;
+  transition: transform 160ms ease, filter 160ms ease;
+}
+
+@mixin secondary-cta() {
+  --background: transparent;
+  --border-color: var(--ml-border-strong);
+  --box-shadow: none;
+  --color: var(--ml-text-primary);
+  --padding-bottom: 0;
+  --padding-top: 0;
+  font-weight: 650;
+  letter-spacing: 0;
+  min-height: 52px;
+  text-transform: none;
+  transition: transform 160ms ease, filter 160ms ease;
+}
+
+@mixin pressed() {
+  filter: brightness(0.96);
+  transform: scale(0.985);
+}
+
+@mixin form-field() {
+  --background: color-mix(in srgb, var(--ml-app-background) 50%, transparent);
+  --border-color: transparent;
+  --color: var(--ml-text-primary);
+  --min-height: 54px;
+  --padding-end: var(--ml-space-3);
+  --padding-start: var(--ml-space-3);
+  border: 1px solid var(--ml-border-subtle);
+  border-radius: var(--ml-radius-md);
+  transition: border-color 180ms ease, background-color 180ms ease;
+}
+
+@mixin form-field-focused() {
+  --background: color-mix(in srgb, var(--ml-surface-glass-strong) 92%, transparent);
+  border-color: var(--ml-border-strong);
+}
+
+@mixin empty-state() {
+  align-items: center;
+  display: grid;
+  gap: var(--ml-space-4);
+  justify-items: center;
+  padding: var(--ml-space-7) var(--ml-space-5);
+  text-align: center;
+}
+
+@mixin floating-navigation-surface() {
+  align-items: center;
+  backdrop-filter: blur(24px) saturate(135%);
+  -webkit-backdrop-filter: blur(24px) saturate(135%);
+  background: color-mix(in srgb, var(--ml-surface-glass-strong) 76%, transparent);
+  border: 1px solid color-mix(in srgb, var(--ml-surface-glass-border) 82%, transparent);
+  border-radius: var(--ml-radius-pill);
+  box-shadow: var(--ml-shadow-soft);
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  min-block-size: 58px;
+  padding: 4px;
+}
+
+@mixin floating-navigation-item() {
+  align-items: center;
+  border-radius: var(--ml-radius-pill);
+  color: var(--ml-text-muted);
+  display: flex;
+  flex-direction: column;
+  font-size: 0.63rem;
+  font-weight: 700;
+  gap: 3px;
+  justify-content: center;
+  letter-spacing: -0.01em;
+  min-block-size: 48px;
+  position: relative;
+  text-decoration: none;
+  transition: color 220ms ease, transform 260ms cubic-bezier(0.22, 0.75, 0.26, 1);
+}

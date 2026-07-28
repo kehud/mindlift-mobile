@@ -1,0 +1,32 @@
+<nav class="floating-navigation" aria-label="Primary navigation">
+  <a
+    class="floating-navigation__item"
+    routerLink="/home"
+    routerLinkActive="is-active"
+    [routerLinkActiveOptions]="{ exact: true }"
+    aria-label="Home"
+  >
+    <ion-icon name="home-outline" aria-hidden="true"></ion-icon>
+    <span>Home</span>
+  </a>
+
+  <a
+    class="floating-navigation__item"
+    routerLink="/history"
+    routerLinkActive="is-active"
+    aria-label="History"
+  >
+    <ion-icon name="time-outline" aria-hidden="true"></ion-icon>
+    <span>History</span>
+  </a>
+
+  <a
+    class="floating-navigation__item"
+    routerLink="/profile-settings"
+    routerLinkActive="is-active"
+    aria-label="Settings"
+  >
+    <ion-icon name="settings-outline" aria-hidden="true"></ion-icon>
+    <span>Settings</span>
+  </a>
+</nav>

@@ -3,7 +3,9 @@ import { Component, inject, OnDestroy } from '@angular/core';
 import { App } from '@capacitor/app';
 import type { PluginListenerHandle } from '@capacitor/core';
 
+import { AuthService } from './core/auth/auth.service';
 import { LanguageDirectionService } from './core/i18n/language-direction.service';
+import { ThemeService } from './core/theme/theme.service';
 import { WorkoutEngineService } from './core/workout-engine/workout-engine.service';
 
 @Component({
@@ -13,13 +15,17 @@ import { WorkoutEngineService } from './core/workout-engine/workout-engine.servi
   standalone: false,
 })
 export class AppComponent implements OnDestroy {
+  private readonly authService = inject(AuthService);
   private readonly languageDirection = inject(LanguageDirectionService);
+  private readonly themeService = inject(ThemeService);
   private readonly workoutEngine = inject(WorkoutEngineService);
 
   private appStateListener: Promise<PluginListenerHandle> | null = null;
 
   constructor() {
-    this.languageDirection.setLanguage(this.languageDirection.getCurrentLanguage());
+    this.authService.initializeAuthState();
+    this.languageDirection.initialize();
+    this.themeService.initialize();
     this.registerAppStateListener();
   }
 

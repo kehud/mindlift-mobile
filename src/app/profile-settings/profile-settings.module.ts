@@ -5,13 +5,15 @@ import { IonicModule } from '@ionic/angular';
 
 import { ProfileSettingsPageRoutingModule } from './profile-settings-routing.module';
 import { ProfileSettingsPage } from './profile-settings.page';
+import { FloatingNavigationModule } from '../shared/floating-navigation/floating-navigation.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    ProfileSettingsPageRoutingModule
+    ProfileSettingsPageRoutingModule,
+    FloatingNavigationModule,
   ],
   declarations: [ProfileSettingsPage]
 })

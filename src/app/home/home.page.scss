@@ -1,3 +1,151 @@
+@use '../shared/ui-kit/primitives' as ui;
+
 :host {
   display: block;
+}
+
+.home-toolbar {
+  @include ui.premium-toolbar;
+  --min-height: 54px;
+}
+
+.home-toolbar ion-title {
+  @include ui.toolbar-title(0.16em);
+}
+
+.home-toolbar ion-button {
+  --color: var(--ml-text-secondary);
+  --padding-end: var(--ml-space-3);
+  --padding-start: var(--ml-space-3);
+}
+
+.home-content {
+  --background: var(--ml-app-background-gradient);
+}
+
+.home-shell {
+  @include ui.screen-shell(var(--ml-space-4), calc(108px + var(--ml-safe-bottom)));
+}
+
+.home-intro {
+  @include ui.page-intro;
+}
+
+.eyebrow {
+  @include ui.section-label;
+}
+
+.home-intro h1 {
+  @include ui.page-title;
+}
+
+.home-intro > p:last-child,
+.featured-workout p,
+.quick-reset p:last-child {
+  @include ui.body-copy;
+}
+
+.featured-workout {
+  @include ui.card-frame;
+  background: linear-gradient(140deg, color-mix(in srgb, var(--ml-accent) 90%, var(--ml-surface-raised)), color-mix(in srgb, var(--ml-accent-muted) 58%, var(--ml-surface) 42%));
+  color: var(--ml-accent-contrast);
+  display: grid;
+  gap: var(--ml-space-6);
+  min-block-size: 190px;
+  overflow: hidden;
+  padding: var(--ml-space-5);
+  position: relative;
+  text-decoration: none;
+  transition: transform 200ms ease, box-shadow 200ms ease, filter 200ms ease;
+}
+
+.featured-workout:active {
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2);
+  filter: saturate(0.94);
+  transform: scale(0.988);
+}
+
+.featured-workout::after {
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.22) 0%, transparent 68%);
+  block-size: 230px;
+  content: '';
+  inline-size: 230px;
+  opacity: 0.7;
+  position: absolute;
+  right: -90px;
+  top: -100px;
+}
+
+.featured-workout > * {
+  position: relative;
+  z-index: 1;
+}
+
+.featured-workout__topline,
+.featured-workout__cta {
+  align-items: center;
+  display: flex;
+  font-size: 0.72rem;
+  font-weight: 750;
+  justify-content: space-between;
+  letter-spacing: 0.08em;
+}
+
+.featured-workout__topline ion-icon {
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 50%;
+  font-size: 1rem;
+  padding: var(--ml-space-2);
+}
+
+.featured-workout h2 {
+  font-size: clamp(1.65rem, 7vw, 2rem);
+  font-weight: 720;
+  letter-spacing: -0.045em;
+  line-height: 1;
+  margin: 0 0 var(--ml-space-2);
+}
+
+.featured-workout p {
+  color: rgba(255, 255, 255, 0.78);
+  max-inline-size: 16rem;
+}
+
+.featured-workout__cta {
+  justify-content: flex-start;
+  letter-spacing: 0;
+}
+
+.featured-workout__cta ion-icon {
+  font-size: 1rem;
+  margin-inline-start: var(--ml-space-2);
+}
+
+.quick-reset {
+  align-items: flex-start;
+  @include ui.glass-card;
+  display: flex;
+  gap: var(--ml-space-3);
+  padding: var(--ml-space-4);
+}
+
+.quick-reset__icon {
+  align-items: center;
+  background: var(--ml-accent-soft);
+  border-radius: 50%;
+  color: var(--ml-accent);
+  display: flex;
+  flex: 0 0 auto;
+  font-size: 1.15rem;
+  height: 40px;
+  justify-content: center;
+  width: 40px;
+}
+
+.quick-reset h2 {
+  color: var(--ml-text-primary);
+  font-size: 1rem;
+  font-weight: 680;
+  line-height: 1.2;
+  margin: var(--ml-space-1) 0;
 }

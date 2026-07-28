@@ -1,14 +1,45 @@
 <ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>Home</ion-title>
+  <ion-toolbar class="home-toolbar">
+    <ion-title>{{ shellLabels.home }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button routerLink="/profile-settings" aria-label="Open settings">
+        <ion-icon name="settings-outline" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true" class="ion-padding">
-  <h1>Home</h1>
-  <p>MindLift home placeholder.</p>
+<ion-content [fullscreen]="true" class="home-content">
+  <main class="home-shell">
+    <section class="home-intro" aria-labelledby="home-title">
+      <p class="eyebrow">YOUR DAILY PRACTICE</p>
+      <h1 id="home-title">Good to see you.</h1>
+      <p>What would you like to strengthen today?</p>
+    </section>
 
-  <ion-button routerLink="/workout-setup">Workout Setup</ion-button>
-  <ion-button routerLink="/history" fill="outline">History</ion-button>
-  <ion-button routerLink="/profile-settings" fill="clear">Profile Settings</ion-button>
+    <a class="featured-workout" routerLink="/workout-setup" aria-label="Set up a strength workout">
+      <div class="featured-workout__topline">
+        <span>START</span>
+        <ion-icon name="arrow-up-outline" aria-hidden="true"></ion-icon>
+      </div>
+      <div>
+        <h2>Strength Workout</h2>
+        <p>A tailored session for a stronger, steadier mind.</p>
+      </div>
+      <span class="featured-workout__cta">Build your session <ion-icon name="arrow-forward" aria-hidden="true"></ion-icon></span>
+    </a>
+
+    <section class="quick-reset" aria-labelledby="quick-reset-title">
+      <div class="quick-reset__icon" aria-hidden="true">
+        <ion-icon name="sparkles-outline"></ion-icon>
+      </div>
+      <div>
+        <p class="eyebrow">SMALL WIN</p>
+        <h2 id="quick-reset-title">Take a mindful reset</h2>
+        <p>Choose a pace and let your next workout meet you there.</p>
+      </div>
+    </section>
+  </main>
 </ion-content>
+
+<app-floating-navigation></app-floating-navigation>

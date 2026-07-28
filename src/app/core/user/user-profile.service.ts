@@ -1,12 +1,14 @@
 import { inject, Injectable } from '@angular/core';
-import { User } from '@angular/fire/auth';
 import {
-  Firestore,
   doc,
+  Firestore,
   runTransaction,
   serverTimestamp,
 } from '@angular/fire/firestore';
+import { FirebaseFirestore } from '@capacitor-firebase/firestore';
+import { Capacitor } from '@capacitor/core';
 
+import { AuthenticatedUser } from '../auth/authenticated-user.model';
 import { CreateUserProfileData } from './user-profile.model';
 
 @Injectable({
@@ -14,11 +16,36 @@ import { CreateUserProfileData } from './user-profile.model';
 })
 export class UserProfileService {
   private readonly firestore = inject(Firestore);
+  private readonly isNativePlatform = Capacitor.isNativePlatform();
 
-  createPasswordUserProfile(user: User): Promise<void> {
+  async createPasswordUserProfile(user: AuthenticatedUser): Promise<void> {
+    if (this.isNativePlatform) {
+      const reference = `users/${user.uid}`;
+      const { snapshot } = await FirebaseFirestore.getDocument({ reference });
+
+      if (snapshot.data) {
+        return;
+      }
+
+      await FirebaseFirestore.setDocument({
+        reference,
+        data: {
+          uid: user.uid,
+          email: user.email,
+          displayName: null,
+          photoURL: null,
+          provider: 'password',
+          onboardingCompleted: false,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        },
+      });
+      return;
+    }
+
     const userRef = doc(this.firestore, 'users', user.uid);
 
-    return runTransaction(this.firestore, async (transaction) => {
+    await runTransaction(this.firestore, async (transaction) => {
       const userSnapshot = await transaction.get(userRef);
 
       if (userSnapshot.exists()) {

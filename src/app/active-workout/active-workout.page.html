@@ -1,38 +1,82 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>Active Workout</ion-title>
-  </ion-toolbar>
-</ion-header>
+<ion-content [fullscreen]="true" class="active-workout-content">
+  <main class="workout-shell" aria-live="polite">
+    <div class="aura aura--one" aria-hidden="true"></div>
+    <div class="aura aura--two" aria-hidden="true"></div>
+    <div class="grain" aria-hidden="true"></div>
 
-<ion-content [fullscreen]="true" class="ion-padding">
-  <h1>Active Workout</h1>
+    <section class="workout-panel" *ngIf="isLoading()" aria-label="Loading workout">
+      <div class="loading-mark" aria-hidden="true">
+        <span></span><span></span><span></span>
+      </div>
+      <p class="eyebrow">MINDFLIFT</p>
+      <h1>Preparing your workout</h1>
+      <p class="supporting-copy">Setting up your personalised session.</p>
+    </section>
 
-  <ion-list *ngIf="session">
-    <ion-item>
-      <ion-label>
-        <h2>Workout type</h2>
-        <p>{{ session.workoutType }}</p>
-      </ion-label>
-    </ion-item>
-    <ion-item>
-      <ion-label>
-        <h2>Duration</h2>
-        <p>{{ session.durationMinutes }} minutes</p>
-      </ion-label>
-    </ion-item>
-    <ion-item>
-      <ion-label>
-        <h2>Coaching tone</h2>
-        <p>{{ session.coachingTone }}</p>
-      </ion-label>
-    </ion-item>
-    <ion-item>
-      <ion-label>
-        <h2>Main goal</h2>
-        <p>{{ session.mainGoal }}</p>
-      </ion-label>
-    </ion-item>
-  </ion-list>
+    <section class="workout-panel" *ngIf="!isLoading() && hasSession()" aria-label="Active workout">
+      <header class="workout-header">
+        <p class="eyebrow">MINDFLIFT</p>
+        <p class="session-kind">{{ session()?.timeline?.title }}</p>
+      </header>
 
-  <ion-button expand="block" [disabled]="!session" (click)="finishWorkout()">Finish Workout</ion-button>
+      <section class="progress-region" aria-label="Workout progress">
+        <div class="phase-row">
+          <span>{{ activeStep()?.title || 'Warm up' }}</span>
+          <time [attr.aria-label]="'Elapsed time ' + elapsedTime()">{{ elapsedTime() }}</time>
+          <span>Finish</span>
+        </div>
+        <div class="progress-track" role="progressbar" aria-label="Workout progress" aria-valuemin="0" aria-valuemax="100" [attr.aria-valuenow]="progressPercent()">
+          <span class="progress-fill" [style.inline-size.%]="progressPercent()"></span>
+          <span class="progress-orb" [style.inset-inline-start.%]="progressPercent()"></span>
+        </div>
+        <div class="progress-caption">
+          <span>{{ progressPercent() }}% complete</span>
+          <span>{{ remainingTime() }} remaining</span>
+        </div>
+      </section>
+
+      <section class="focus-region" [class.is-paused]="isPaused()">
+        <p class="cue-kicker">{{ isPaused() ? 'PAUSED' : cueContent().title }}</p>
+        <time class="workout-timer" [attr.aria-label]="remainingTime() + ' remaining'">{{ remainingTime() }}</time>
+        <div class="pulse-line" aria-hidden="true">
+          <span *ngFor="let bar of [12, 19, 30, 17, 24, 39, 21, 16, 29, 43, 26, 14, 20, 34, 19, 12]"></span>
+        </div>
+        <p class="cue-copy">{{ cueContent().text }}</p>
+      </section>
+
+      <footer class="workout-actions">
+        <button class="boost-button" type="button" disabled aria-label="Boost Me is coming soon">
+          <span class="bolt" aria-hidden="true">ϟ</span>
+          <span>BOOST ME</span>
+          <small>Coming soon</small>
+        </button>
+
+        <div class="primary-actions">
+          <button class="action-button audio-button" type="button" disabled aria-label="Audio cues are not available yet">
+            <ion-icon name="volume-medium-outline" aria-hidden="true"></ion-icon>
+          </button>
+
+          <button
+            class="pause-button"
+            type="button"
+            [disabled]="isCompleted()"
+            (click)="togglePause()"
+            [attr.aria-label]="isPaused() ? 'Resume workout' : 'Pause workout'">
+            <ion-icon [name]="isPaused() ? 'play' : 'pause'" aria-hidden="true"></ion-icon>
+            <span>{{ isPaused() ? 'Resume' : 'Pause' }}</span>
+          </button>
+
+          <button class="action-button finish-button" type="button" (click)="finishWorkout()" aria-label="Finish workout">
+            <span>End</span>
+          </button>
+        </div>
+      </footer>
+    </section>
+
+    <section class="workout-panel empty-panel" *ngIf="!isLoading() && !hasSession()" aria-label="Workout unavailable">
+      <p class="eyebrow">MINDFLIFT</p>
+      <h1>Your workout is unavailable</h1>
+      <p class="supporting-copy">Returning you to setup so you can begin a new session.</p>
+    </section>
+  </main>
 </ion-content>
