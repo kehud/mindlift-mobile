@@ -1,20 +1,8 @@
-<ion-header [translucent]="true">
-  <ion-toolbar class="home-toolbar">
-    <ion-title>{{ shellLabels.home }}</ion-title>
-    <ion-buttons slot="end">
-      <ion-button routerLink="/profile-settings" aria-label="Open settings">
-        <ion-icon name="settings-outline" slot="icon-only"></ion-icon>
-      </ion-button>
-    </ion-buttons>
-  </ion-toolbar>
-</ion-header>
-
-<ion-content [fullscreen]="true" class="home-content">
+<ion-content [fullscreen]="true" [forceOverscroll]="false" class="home-content">
   <main class="home-shell">
-    <section class="home-intro" aria-labelledby="home-title">
-      <p class="eyebrow">YOUR DAILY PRACTICE</p>
-      <h1 id="home-title">Good to see you.</h1>
-      <p>What would you like to strengthen today?</p>
+    <section class="home-intro" aria-labelledby="home-title" *ngIf="greeting$ | async as greeting">
+      <h1 id="home-title">{{ greeting.text }}</h1>
+      <ion-icon [name]="greeting.icon" aria-hidden="true"></ion-icon>
     </section>
 
     <a class="featured-workout" routerLink="/workout-setup" aria-label="Set up a strength workout">

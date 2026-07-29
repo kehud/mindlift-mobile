@@ -4,31 +4,32 @@
   display: block;
 }
 
-.home-toolbar {
-  @include ui.premium-toolbar;
-  --min-height: 54px;
-}
-
-.home-toolbar ion-title {
-  @include ui.toolbar-title(0.16em);
-}
-
-.home-toolbar ion-button {
-  --color: var(--ml-text-secondary);
-  --padding-end: var(--ml-space-3);
-  --padding-start: var(--ml-space-3);
-}
-
 .home-content {
   --background: var(--ml-app-background-gradient);
 }
 
+.home-content::part(scroll) {
+  overscroll-behavior-y: none;
+}
+
 .home-shell {
   @include ui.screen-shell(var(--ml-space-4), calc(108px + var(--ml-safe-bottom)));
+  padding-block-start: var(--ml-page-padding-top-safe);
 }
 
 .home-intro {
   @include ui.page-intro;
+  align-items: center;
+  box-sizing: border-box;
+  display: flex;
+  gap: var(--ml-space-4);
+  inline-size: min(100%, 420px);
+  justify-content: space-between;
+  justify-self: center;
+  margin-inline: auto;
+  max-inline-size: 100%;
+  padding-block: calc(var(--ml-space-1) + var(--ml-space-2)) calc(var(--ml-space-2) + var(--ml-space-3));
+  padding-inline: 0;
 }
 
 .eyebrow {
@@ -37,9 +38,17 @@
 
 .home-intro h1 {
   @include ui.page-title;
+  font-size: clamp(1.7rem, 7.225vw, 2.17rem);
+  margin: 0;
+  min-inline-size: 0;
 }
 
-.home-intro > p:last-child,
+.home-intro ion-icon {
+  color: var(--ml-text-primary);
+  flex: 0 0 auto;
+  font-size: clamp(1.7rem, 7.225vw, 2.17rem);
+}
+
 .featured-workout p,
 .quick-reset p:last-child {
   @include ui.body-copy;
