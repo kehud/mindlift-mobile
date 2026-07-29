@@ -4,55 +4,128 @@
   display: block;
 }
 
-.auth-toolbar {
-  @include ui.premium-toolbar;
-}
-
-.auth-toolbar ion-title {
-  @include ui.toolbar-title(0.16em);
-}
-
 .auth-content {
   --background: var(--ml-app-background-gradient);
 }
 
-.auth-shell {
-  @include ui.screen-shell(var(--ml-space-5), var(--ml-page-padding-bottom-safe), 420px);
+.auth-orbits {
+  background: repeating-radial-gradient(ellipse 218px 174px at 108% -6%, transparent 0 10px, rgba(var(--ml-accent-rgb), 0.075) 11px 12px, transparent 13px 21px);
+  block-size: 292px;
+  opacity: 0.72;
+  pointer-events: none;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 264px;
 }
 
-.eyebrow {
-  @include ui.section-label(var(--ml-accent));
+.auth-shell {
+  display: grid;
+  gap: 22px;
+  inline-size: min(calc(100% - 44px - var(--ml-safe-left) - var(--ml-safe-right)), 326px);
+  margin-inline: auto;
+  padding-block: calc(var(--ml-safe-top) + 42px) calc(var(--ml-safe-bottom) + 32px);
+  position: relative;
 }
 
 .auth-intro {
-  @include ui.page-intro;
+  display: grid;
+  gap: var(--ml-space-1);
 }
 
 .auth-intro h1 {
-  @include ui.page-title;
+  color: var(--ml-text-primary);
+  font-size: 1.62rem;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  line-height: 1.12;
+  margin: 0;
 }
 
-.auth-intro > p:last-child {
-  @include ui.body-copy;
+.auth-intro p {
+  color: var(--ml-text-secondary);
+  font-size: 0.88rem;
+  line-height: 1.4;
+  margin: 0;
 }
 
-.auth-card,
-.register-panel {
-  @include ui.glass-card(18px);
+.auth-actions,
+.email-form form {
+  display: grid;
+  gap: 12px;
 }
 
-.auth-card {
-  padding: var(--ml-space-3);
+.provider-button,
+.email-trigger,
+.email-submit {
+  --border-radius: var(--ml-radius-sm);
+  --padding-bottom: 0;
+  --padding-top: 0;
+  font-size: 0.88rem;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+  margin: 0;
+  min-height: 58px;
+  text-transform: none;
 }
 
-.auth-card form,
-.register-panel form {
+.provider-button {
+  --background: color-mix(in srgb, var(--ml-text-primary) 96%, #ffffff);
+  --background-activated: color-mix(in srgb, var(--ml-text-primary) 88%, #ffffff);
+  --box-shadow: 0 6px 14px rgba(0, 0, 0, 0.18);
+  --color: #171518;
+  --opacity: 1;
+  opacity: 1;
+}
+
+.provider-button[disabled] {
+  opacity: 1;
+}
+
+.provider-button ion-icon {
+  color: #171518;
+  font-size: 1.16rem;
+}
+
+.google-mark {
+  color: #4285f4;
+  font-size: 1.08rem;
+  font-weight: 800;
+  margin-inline-end: 1px;
+}
+
+.auth-divider {
+  color: var(--ml-text-muted);
+  display: block;
+  font-size: 1rem;
+  line-height: 0.8;
+  margin-block: 5px;
+  text-align: center;
+}
+
+.email-trigger {
+  --background: linear-gradient(135deg, var(--ml-accent), var(--ml-accent-strong));
+  --background-activated: var(--ml-accent-muted);
+  --box-shadow: 0 9px 18px rgba(var(--ml-accent-rgb), 0.2);
+  --color: var(--ml-accent-contrast);
+}
+
+.email-form {
+  @include ui.glass-card(16px);
   display: grid;
   gap: var(--ml-space-3);
+  padding: 14px;
+}
+
+.email-form--register {
+  margin-block-start: 8px;
 }
 
 .auth-field {
   @include ui.form-field;
+  --min-height: 58px;
+  --padding-end: var(--ml-space-3);
+  --padding-start: var(--ml-space-3);
 }
 
 .auth-field:focus-within {
@@ -61,67 +134,398 @@
 
 .auth-field ion-icon {
   color: var(--ml-text-muted);
-  font-size: 1.05rem;
+  font-size: 1rem;
   margin-inline-end: var(--ml-space-2);
 }
 
 .auth-field ion-input {
   --placeholder-color: var(--ml-text-muted);
   --placeholder-opacity: 1;
-  font-size: 0.94rem;
+  font-size: 0.96rem;
 }
 
-.auth-card ion-button {
-  @include ui.primary-cta;
-  margin: var(--ml-space-1) 0 0;
+.email-submit {
+  @include ui.primary-cta(0.94rem);
+  --box-shadow: 0 10px 20px rgba(var(--ml-accent-rgb), 0.2);
+  margin-block-start: var(--ml-space-1);
+  min-height: 58px;
 }
 
-.auth-card ion-button:active,
-.register-panel ion-button:active {
+.email-submit:active {
   @include ui.pressed;
 }
 
-.register-panel {
-  overflow: hidden;
-}
-
-.register-panel summary {
+.auth-footer {
   align-items: center;
   color: var(--ml-text-secondary);
-  cursor: pointer;
   display: flex;
-  font-size: 0.86rem;
-  justify-content: space-between;
-  list-style: none;
-  padding: var(--ml-space-4);
+  font-size: 0.84rem;
+  gap: var(--ml-space-1);
+  justify-content: center;
+  line-height: 1.4;
+  margin: 36px 0 0;
+  text-align: center;
 }
 
-.register-panel summary::-webkit-details-marker {
-  display: none;
-}
-
-.register-panel summary strong {
+.auth-footer button {
+  background: transparent;
+  border: 0;
   color: var(--ml-accent);
+  cursor: pointer;
+  font: inherit;
   font-weight: 700;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
 }
 
-.register-panel[open] summary {
-  border-block-end: 1px solid var(--ml-border-subtle);
-}
-
-.register-panel form {
-  padding: var(--ml-space-3);
-}
-
-.register-panel ion-button {
-  @include ui.secondary-cta;
-  font-size: 0.92rem;
+.auth-footer button:focus-visible {
+  box-shadow: var(--ml-shadow-focus);
+  outline: none;
 }
 
 .auth-error {
   color: var(--ion-color-danger);
-  font-size: 0.83rem;
+  font-size: 0.82rem;
   line-height: 1.4;
   margin: 0;
   text-align: center;
+}
+
+:host-context(:root[data-theme='light']) .auth-orbits,
+:host-context(body[data-theme='light']) .auth-orbits {
+  opacity: 0.42;
+}
+
+:host-context(:root[data-theme='light']) .provider-button,
+:host-context(body[data-theme='light']) .provider-button {
+  --background: var(--ml-surface-raised);
+  --background-activated: var(--ml-surface-soft);
+  --color: var(--ml-text-primary);
+  --box-shadow: var(--ml-shadow-soft);
+}
+
+:host-context(:root[data-theme='light']) .provider-button ion-icon,
+:host-context(body[data-theme='light']) .provider-button ion-icon {
+  color: var(--ml-text-primary);
+}
+
+@media (max-width: 360px), (max-height: 620px) {
+  .auth-shell {
+    gap: 18px;
+    inline-size: min(calc(100% - 36px - var(--ml-safe-left) - var(--ml-safe-right)), 326px);
+    padding-block: calc(var(--ml-safe-top) + 28px) calc(var(--ml-safe-bottom) + 24px);
+  }
+
+  .auth-orbits {
+    block-size: 230px;
+    opacity: 0.48;
+    width: 224px;
+  }
+
+  .auth-intro h1 {
+    font-size: 1.5rem;
+  }
+
+  .auth-intro p,
+  .provider-button,
+  .email-trigger,
+  .email-submit,
+  .auth-footer {
+    font-size: 0.82rem;
+  }
+
+  .provider-button,
+  .email-trigger,
+  .email-submit,
+  .auth-field {
+    min-height: 52px;
+  }
+
+  .auth-field {
+    --min-height: 52px;
+  }
+
+  .auth-actions,
+  .email-form form {
+    gap: 10px;
+  }
+
+  .auth-footer {
+    margin-block-start: 26px;
+  }
+}
+
+@media (min-width: 420px) and (min-height: 780px) {
+  .auth-shell {
+    gap: 24px;
+    padding-block: calc(var(--ml-safe-top) + 46px) calc(var(--ml-safe-bottom) + 36px);
+  }
+}
+
+.auth-content--login {
+  --background: linear-gradient(180deg, #171416 0%, #0d0d10 58%, #070709 100%);
+}
+
+.auth-content--login .auth-orbits {
+  background: repeating-radial-gradient(
+    ellipse 136px 110px at 108% -6%,
+    transparent 0 9px,
+    rgba(var(--ml-accent-rgb), 0.032) 10px 11px,
+    transparent 12px 19px
+  );
+  block-size: 158px;
+  opacity: 0.34;
+  right: 0;
+  top: 0;
+  width: 162px;
+}
+
+.auth-content--login .auth-shell {
+  display: block;
+  inline-size: 100%;
+  min-block-size: 100dvh;
+  padding: 0;
+}
+
+.login-composition {
+  --login-button-inline-size: min(
+    calc(90vw - 10.8px),
+    399.6px,
+    calc(100vw - 24px - var(--ml-safe-left) - var(--ml-safe-right))
+  );
+  --login-copy-inline-size: min(100%, 334px);
+  --login-page-inline-padding: calc(11px + max(var(--ml-safe-left), var(--ml-safe-right)));
+  box-sizing: border-box;
+  display: grid;
+  grid-template-rows: auto auto auto minmax(0, 1fr) auto;
+  inline-size: 100%;
+  margin-inline: auto;
+  min-block-size: 100dvh;
+  padding-block: calc(var(--ml-safe-top) + 16px) calc(var(--ml-safe-bottom) + 30px);
+  padding-inline: var(--login-page-inline-padding);
+  position: relative;
+  z-index: 1;
+}
+
+.login-heading {
+  display: grid;
+  gap: 3px;
+  grid-row: 1;
+  inline-size: var(--login-copy-inline-size);
+  margin-block-end: 200px;
+  margin-inline: auto;
+}
+
+.login-heading h1 {
+  color: var(--ml-text-primary);
+  font-size: 1.7rem;
+  font-weight: 720;
+  letter-spacing: -0.025em;
+  line-height: 1.08;
+  margin: 0;
+}
+
+.login-heading p {
+  color: var(--ml-text-secondary);
+  font-size: 0.99rem;
+  line-height: 1.35;
+  margin: 0;
+}
+
+.login-provider-stack {
+  align-items: center;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  grid-row: 2;
+  inline-size: 100%;
+  margin-inline: auto;
+  max-inline-size: var(--login-button-inline-size);
+}
+
+.login-email-form form {
+  display: grid;
+  gap: 9px;
+}
+
+.auth-content--login .provider-button,
+.auth-content--login .email-trigger,
+.auth-content--login .email-submit {
+  --border-radius: 8px;
+  --padding-bottom: 0;
+  --padding-top: 0;
+  block-size: 66px;
+  font-size: 1.03rem;
+  font-weight: 680;
+  letter-spacing: -0.01em;
+  inline-size: 100%;
+  margin-inline: auto;
+  max-inline-size: var(--login-button-inline-size);
+  min-block-size: 66px;
+  min-height: 66px;
+  text-transform: none;
+}
+
+.auth-content--login .provider-button {
+  --background: #f2efec;
+  --background-activated: #e8e4e0;
+  --box-shadow: 0 6px 14px rgba(0, 0, 0, 0.18);
+  --color: #171518;
+}
+
+.auth-content--login .provider-button ion-icon {
+  color: #171518;
+  font-size: 1.28rem;
+}
+
+.auth-content--login .google-mark {
+  color: #4285f4;
+  font-size: 1.22rem;
+  font-weight: 800;
+  margin-inline-end: 0;
+}
+
+.auth-content--login .auth-divider {
+  color: rgba(185, 177, 170, 0.62);
+  display: block;
+  font-size: 0.78rem;
+  line-height: 0.8;
+  margin-block: -6px -10px;
+  text-align: center;
+}
+
+.auth-content--login .email-trigger {
+  --background: linear-gradient(180deg, rgba(255, 255, 255, 0.052), rgba(255, 255, 255, 0.026));
+  --background-activated: rgba(255, 255, 255, 0.074);
+  --border-color: rgba(255, 255, 255, 0.09);
+  --border-style: solid;
+  --border-width: 1px;
+  --box-shadow:
+    0 9px 20px rgba(0, 0, 0, 0.2),
+    0 0 18px rgba(var(--ml-accent-rgb), 0.035),
+    inset 0 1px 0 rgba(255, 255, 255, 0.052);
+  --color: var(--ml-text-primary);
+}
+
+.login-email-form {
+  @include ui.glass-card(14px, rgba(255, 255, 255, 0.045));
+  box-sizing: border-box;
+  grid-row: 3;
+  inline-size: 100%;
+  margin-inline: auto;
+  margin-block-start: 33px;
+  max-inline-size: var(--login-button-inline-size);
+  padding: 10px;
+}
+
+.auth-content--login .auth-field {
+  --min-height: 44px;
+  --padding-end: 10px;
+  --padding-start: 10px;
+  min-block-size: 44px;
+}
+
+.auth-content--login .auth-field ion-icon {
+  font-size: 0.88rem;
+}
+
+.auth-content--login .auth-field ion-input {
+  font-size: 0.78rem;
+}
+
+.auth-content--login .email-submit {
+  @include ui.primary-cta(1.03rem);
+  --border-radius: 8px;
+  --box-shadow: 0 8px 18px rgba(var(--ml-accent-rgb), 0.18);
+  block-size: 66px;
+  min-block-size: 66px;
+  min-height: 66px;
+}
+
+.login-footer {
+  align-items: center;
+  color: var(--ml-text-secondary);
+  display: flex;
+  font-size: 0.72rem;
+  gap: 4px;
+  grid-row: 5;
+  inline-size: var(--login-copy-inline-size);
+  justify-content: center;
+  line-height: 1.35;
+  margin: 0;
+  margin-inline: auto;
+  text-align: center;
+}
+
+.login-footer button {
+  color: var(--ml-accent-strong);
+  font-weight: 760;
+}
+
+.auth-content--login .auth-error {
+  font-size: 0.72rem;
+  inline-size: min(calc(100% - 22px - var(--ml-safe-left) - var(--ml-safe-right)), 334px);
+  margin: 10px auto 0;
+}
+
+:host-context(:root[data-theme='light']) .auth-content--login .auth-orbits,
+:host-context(body[data-theme='light']) .auth-content--login .auth-orbits {
+  opacity: 0.32;
+}
+
+:host-context(:root[data-theme='light']) .auth-content--login .email-trigger,
+:host-context(body[data-theme='light']) .auth-content--login .email-trigger {
+  --background: rgba(255, 255, 255, 0.72);
+  --background-activated: rgba(238, 238, 235, 0.9);
+  --border-color: rgba(21, 19, 22, 0.08);
+  --box-shadow: var(--ml-shadow-soft);
+  --color: var(--ml-text-primary);
+}
+
+@media (max-width: 360px), (max-height: 620px) {
+  .login-composition {
+    --login-button-inline-size: min(
+      calc(90vw - 10.8px),
+      399.6px,
+      calc(100vw - 20px - var(--ml-safe-left) - var(--ml-safe-right))
+    );
+    --login-page-inline-padding: calc(10px + max(var(--ml-safe-left), var(--ml-safe-right)));
+    inline-size: 100%;
+    padding-block: calc(var(--ml-safe-top) + 0px) calc(var(--ml-safe-bottom) + 20px);
+  }
+
+  .login-heading {
+    margin-block-end: 154px;
+  }
+
+  .login-provider-stack,
+  .login-email-form form {
+    gap: 8px;
+  }
+
+  .auth-content--login .provider-button,
+  .auth-content--login .email-trigger,
+  .auth-content--login .email-submit {
+    block-size: 60px;
+    min-block-size: 60px;
+    min-height: 60px;
+  }
+
+  .auth-content--login .auth-field {
+    --min-height: 46px;
+    min-block-size: 46px;
+  }
+
+  .auth-content--login .auth-orbits {
+    block-size: 136px;
+    top: 0;
+    width: 140px;
+  }
+}
+
+@media (min-width: 420px) and (min-height: 780px) {
+  .login-composition {
+    padding-block: calc(var(--ml-safe-top) + 24px) calc(var(--ml-safe-bottom) + 36px);
+  }
 }

@@ -1,57 +1,76 @@
-<ion-header [translucent]="true">
-  <ion-toolbar class="auth-toolbar">
-    <ion-title>MINDFLIFT</ion-title>
-  </ion-toolbar>
-</ion-header>
-
-<ion-content [fullscreen]="true" class="auth-content">
+<ion-content [fullscreen]="true" class="auth-content" [class.auth-content--login]="authView === 'login'">
+  <div class="auth-orbits" aria-hidden="true"></div>
   <main class="auth-shell">
-    <section class="auth-intro" aria-labelledby="login-title">
-      <p class="eyebrow">WELCOME BACK</p>
-      <h1 id="login-title">A clearer mind<br>starts here.</h1>
-      <p>Sign in to continue your practice.</p>
-    </section>
+    <ng-container *ngIf="authView === 'login'; else registerView">
+      <section class="login-composition" aria-labelledby="login-title">
+        <header class="login-heading">
+          <h1 id="login-title">Welcome back</h1>
+          <p>Log in to continue</p>
+        </header>
 
-    <section class="auth-card" aria-label="Sign in">
-      <form #loginForm="ngForm" novalidate (ngSubmit)="onLoginFormSubmit(loginForm)">
-        <ion-item lines="none" class="auth-field">
-          <ion-icon name="mail-outline" slot="start" aria-hidden="true"></ion-icon>
-          <ion-input
-            aria-label="Email"
-            placeholder="Email address"
-            type="email"
-            name="loginEmail"
-            autocomplete="email"
-            required
-            [(ngModel)]="loginEmail"
-          ></ion-input>
-        </ion-item>
-        <ion-item lines="none" class="auth-field">
-          <ion-icon name="lock-closed-outline" slot="start" aria-hidden="true"></ion-icon>
-          <ion-input
-            aria-label="Password"
-            placeholder="Password"
-            type="password"
-            name="loginPassword"
-            autocomplete="current-password"
-            required
-            [(ngModel)]="loginPassword"
-          ></ion-input>
-        </ion-item>
+        <section class="login-provider-stack" aria-label="Sign in options">
+          <ion-button class="provider-button" expand="block" fill="solid" disabled>
+            <ion-icon name="logo-apple" slot="start" aria-hidden="true"></ion-icon>
+            Continue with Apple
+          </ion-button>
+          <ion-button class="provider-button" expand="block" fill="solid" disabled>
+            <span class="google-mark" slot="start" aria-hidden="true">G</span>
+            Continue with Google
+          </ion-button>
+          <span class="auth-divider" aria-hidden="true">⌁</span>
+          <ion-button class="email-trigger" expand="block" *ngIf="!isEmailLoginVisible" (click)="showEmailLogin()">
+            Continue with Email
+          </ion-button>
+        </section>
 
-        <ion-button type="button" expand="block" [disabled]="submittingAction !== null" (click)="onLoginButtonClick(loginForm)">
-          {{ submittingAction === 'login' ? 'Signing in…' : 'Continue with email' }}
-          <ion-icon name="arrow-forward" slot="end" aria-hidden="true"></ion-icon>
-        </ion-button>
-      </form>
-    </section>
+        <section class="email-form login-email-form" *ngIf="isEmailLoginVisible" aria-label="Email sign in">
+          <form #loginForm="ngForm" novalidate (ngSubmit)="onLoginFormSubmit(loginForm)">
+            <ion-item lines="none" class="auth-field">
+              <ion-icon name="mail-outline" slot="start" aria-hidden="true"></ion-icon>
+              <ion-input
+                aria-label="Email"
+                placeholder="Email address"
+                type="email"
+                name="loginEmail"
+                autocomplete="email"
+                required
+                [(ngModel)]="loginEmail"
+              ></ion-input>
+            </ion-item>
+            <ion-item lines="none" class="auth-field">
+              <ion-icon name="lock-closed-outline" slot="start" aria-hidden="true"></ion-icon>
+              <ion-input
+                aria-label="Password"
+                placeholder="Password"
+                type="password"
+                name="loginPassword"
+                autocomplete="current-password"
+                required
+                [(ngModel)]="loginPassword"
+              ></ion-input>
+            </ion-item>
 
-    <details class="register-panel">
-      <summary>
-        <span>New to MindLift?</span>
-        <strong>Create an account</strong>
-      </summary>
+            <ion-button type="button" class="email-submit" expand="block" [disabled]="submittingAction !== null" (click)="onLoginButtonClick(loginForm)">
+              {{ submittingAction === 'login' ? 'Signing in…' : 'Continue with Email' }}
+              <ion-icon name="arrow-forward" slot="end" aria-hidden="true"></ion-icon>
+            </ion-button>
+          </form>
+        </section>
 
+        <p class="auth-footer login-footer">
+          <span>Don’t have an account?</span>
+          <button type="button" (click)="showRegister()">Sign up</button>
+        </p>
+      </section>
+    </ng-container>
+
+    <ng-template #registerView>
+      <section class="auth-intro" aria-labelledby="register-title">
+        <h1 id="register-title">Create your account</h1>
+        <p>Start your MindLift practice</p>
+      </section>
+
+      <section class="email-form email-form--register" aria-label="Create account">
       <form (ngSubmit)="registerWithEmail()">
         <ion-item lines="none" class="auth-field">
           <ion-icon name="mail-outline" slot="start" aria-hidden="true"></ion-icon>
@@ -78,11 +97,18 @@
           ></ion-input>
         </ion-item>
 
-        <ion-button type="submit" expand="block" fill="outline" [disabled]="submittingAction !== null">
+        <ion-button type="submit" class="email-submit" expand="block" [disabled]="submittingAction !== null">
           {{ submittingAction === 'register' ? 'Creating account…' : 'Create account' }}
+          <ion-icon name="arrow-forward" slot="end" aria-hidden="true"></ion-icon>
         </ion-button>
       </form>
-    </details>
+      </section>
+
+      <p class="auth-footer">
+        <span>Already have an account?</span>
+        <button type="button" (click)="showLogin()">Log in</button>
+      </p>
+    </ng-template>
 
     <p class="auth-error" *ngIf="errorMessage" role="alert">{{ errorMessage }}</p>
   </main>

@@ -6,6 +6,7 @@ import { AuthService } from '../core/auth/auth.service';
 import { OnboardingProfileService } from '../core/onboarding/onboarding-profile.service';
 
 type AuthAction = 'login' | 'register';
+type AuthView = 'login' | 'register';
 
 @Component({
   selector: 'app-login',
@@ -24,6 +25,24 @@ export class LoginPage {
   registerPassword = '';
   errorMessage: string | null = null;
   submittingAction: AuthAction | null = null;
+  authView: AuthView = 'login';
+  isEmailLoginVisible = false;
+
+  showEmailLogin(): void {
+    this.errorMessage = null;
+    this.isEmailLoginVisible = true;
+  }
+
+  showRegister(): void {
+    this.errorMessage = null;
+    this.authView = 'register';
+  }
+
+  showLogin(): void {
+    this.errorMessage = null;
+    this.authView = 'login';
+    this.isEmailLoginVisible = false;
+  }
 
   onLoginButtonClick(form: NgForm): void {
     void this.submitLoginForm(form);
