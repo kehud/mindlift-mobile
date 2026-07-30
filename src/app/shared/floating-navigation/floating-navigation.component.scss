@@ -62,3 +62,29 @@
   box-shadow: var(--ml-shadow-focus);
   outline: none;
 }
+
+:host(.home-navigation) {
+  width: min(calc(100% - 40px), 306px);
+}
+
+:host(.home-navigation) .floating-navigation {
+  border-radius: 29px;
+  box-sizing: border-box;
+  min-block-size: 59px;
+  padding: 3.6px;
+}
+
+:host(.home-navigation) .floating-navigation__item {
+  font-size: 0.7rem;
+  font-weight: 630;
+  gap: 3.6px;
+  min-block-size: 50px;
+}
+
+:host(.home-navigation) .floating-navigation__item ion-icon {
+  font-size: 1.19rem;
+}
+
+:host(.home-navigation) .floating-navigation__item.is-active ion-icon {
+  transform: translateY(-1px) scale(1);
+}
