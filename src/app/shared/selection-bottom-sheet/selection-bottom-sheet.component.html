@@ -1,0 +1,32 @@
+<ion-modal
+  class="selection-bottom-sheet"
+  [isOpen]="isOpen"
+  [breakpoints]="[0, 0.5, 0.75]"
+  [initialBreakpoint]="0.5"
+  [handle]="true"
+  [backdropDismiss]="true"
+  (didDismiss)="dismissed.emit()"
+>
+  <ng-template>
+    <ion-content class="selection-bottom-sheet__content">
+      <section class="selection-bottom-sheet__surface" [attr.aria-label]="fieldTitle">
+        <h2>{{ fieldTitle }}</h2>
+
+        <div class="selection-bottom-sheet__options" role="listbox" [attr.aria-label]="fieldTitle">
+          <button
+            *ngFor="let option of options"
+            type="button"
+            class="selection-bottom-sheet__option"
+            [class.is-selected]="isSelected(option)"
+            [attr.aria-selected]="isSelected(option)"
+            role="option"
+            (click)="selectOption(option)"
+          >
+            <span>{{ option.label }}</span>
+            <ion-icon *ngIf="isSelected(option)" name="checkmark" aria-hidden="true"></ion-icon>
+          </button>
+        </div>
+      </section>
+    </ion-content>
+  </ng-template>
+</ion-modal>

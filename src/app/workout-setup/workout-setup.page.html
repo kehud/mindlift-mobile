@@ -1,13 +1,14 @@
-<ion-header [translucent]="true">
-  <ion-toolbar class="setup-toolbar">
-    <ion-buttons slot="start">
-      <ion-back-button defaultHref="/home"></ion-back-button>
-    </ion-buttons>
-    <ion-title>NEW WORKOUT</ion-title>
-  </ion-toolbar>
-</ion-header>
-
 <ion-content [fullscreen]="true" class="setup-content">
+  <button
+    slot="fixed"
+    type="button"
+    class="setup-close"
+    aria-label="Close workout setup"
+    (click)="closeSetup()"
+  >
+    <ion-icon name="close-outline" aria-hidden="true"></ion-icon>
+  </button>
+
   <main class="setup-shell">
     <section class="setup-intro" aria-labelledby="setup-title">
       <p class="eyebrow">MAKE IT YOURS</p>
@@ -19,10 +20,7 @@
       <button
         type="button"
         class="setup-selector-row"
-        [class.is-expanded]="activeSelector === 'workoutType'"
-        [attr.aria-expanded]="activeSelector === 'workoutType'"
-        aria-controls="workout-type-options"
-        (click)="toggleSelector('workoutType')"
+        (click)="openSheet('workoutType')"
       >
         <span class="setup-option__icon" aria-hidden="true">
           <ion-icon name="barbell-outline"></ion-icon>
@@ -34,30 +32,10 @@
         <ion-icon class="setup-selector-chevron" name="chevron-forward-outline" aria-hidden="true"></ion-icon>
       </button>
 
-      <ion-radio-group
-        *ngIf="activeSelector === 'workoutType'"
-        id="workout-type-options"
-        class="setup-choice-group"
-        [(ngModel)]="workoutType"
-        (ionChange)="closeSelector()"
-      >
-        <ion-radio
-          *ngFor="let option of workoutTypeOptions"
-          class="setup-choice"
-          [value]="option.value"
-          labelPlacement="end"
-        >
-          {{ option.label }}
-        </ion-radio>
-      </ion-radio-group>
-
       <button
         type="button"
         class="setup-selector-row"
-        [class.is-expanded]="activeSelector === 'duration'"
-        [attr.aria-expanded]="activeSelector === 'duration'"
-        aria-controls="duration-options"
-        (click)="toggleSelector('duration')"
+        (click)="openSheet('duration')"
       >
         <span class="setup-option__icon" aria-hidden="true">
           <ion-icon name="time-outline"></ion-icon>
@@ -69,42 +47,27 @@
         <ion-icon class="setup-selector-chevron" name="chevron-forward-outline" aria-hidden="true"></ion-icon>
       </button>
 
-      <ion-radio-group
-        *ngIf="activeSelector === 'duration'"
-        id="duration-options"
-        class="setup-choice-group"
-        [(ngModel)]="durationMinutes"
-        (ionChange)="closeSelector()"
-      >
-        <ion-radio
-          *ngFor="let option of durationOptions"
-          class="setup-choice"
-          [value]="option.value"
-          labelPlacement="end"
-        >
-          {{ option.label }}
-        </ion-radio>
-      </ion-radio-group>
-
-      <div class="setup-option setup-option--static">
-        <div class="setup-option__icon" aria-hidden="true">
+      <button type="button" class="setup-selector-row" (click)="openSheet('coachingTone')">
+        <span class="setup-option__icon" aria-hidden="true">
           <ion-icon name="heart-outline"></ion-icon>
-        </div>
-        <div>
+        </span>
+        <span class="setup-selector-copy">
           <span>Coaching style</span>
-          <strong>{{ coachingTone || 'Choose in onboarding' }}</strong>
-        </div>
-      </div>
+          <strong>{{ coachingToneLabel }}</strong>
+        </span>
+        <ion-icon class="setup-selector-chevron" name="chevron-forward-outline" aria-hidden="true"></ion-icon>
+      </button>
 
-      <div class="setup-option setup-option--static">
-        <div class="setup-option__icon" aria-hidden="true">
+      <button type="button" class="setup-selector-row" (click)="openSheet('mainGoal')">
+        <span class="setup-option__icon" aria-hidden="true">
           <ion-icon name="sparkles-outline"></ion-icon>
-        </div>
-        <div>
+        </span>
+        <span class="setup-selector-copy">
           <span>Today’s intention</span>
-          <strong>{{ mainGoal || 'Choose in onboarding' }}</strong>
-        </div>
-      </div>
+          <strong>{{ mainGoalLabel }}</strong>
+        </span>
+        <ion-icon class="setup-selector-chevron" name="chevron-forward-outline" aria-hidden="true"></ion-icon>
+      </button>
     </section>
 
     <ion-button class="start-workout" expand="block" [disabled]="!canContinue" (click)="continue()">
@@ -112,4 +75,13 @@
       <ion-icon name="arrow-forward" slot="end" aria-hidden="true"></ion-icon>
     </ion-button>
   </main>
+
+  <app-selection-bottom-sheet
+    [fieldTitle]="sheetTitle"
+    [isOpen]="activeSheet !== null"
+    [options]="sheetOptions"
+    [selectedValue]="sheetSelectedValue"
+    (dismissed)="closeSheet()"
+    (optionSelected)="selectSheetOption($event)"
+  ></app-selection-bottom-sheet>
 </ion-content>
