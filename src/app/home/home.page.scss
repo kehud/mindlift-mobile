@@ -39,7 +39,7 @@
 .home-intro h1 {
   @include ui.page-title;
   font-weight: 650;
-  font-size: clamp(1.7rem, 7.225vw, 2.17rem);
+  font-size: ui.$primary-page-title-size;
   margin: 0;
   min-inline-size: 0;
 }

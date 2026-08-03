@@ -43,7 +43,7 @@
 
 .setup-intro h1 {
   @include ui.page-title;
-  font-size: clamp(1.7rem, 7.225vw, 2.17rem);
+  font-size: ui.$primary-page-title-size;
   font-weight: 660;
 }
 
@@ -126,8 +126,7 @@
 .setup-selector-copy strong,
 .setup-option--static strong {
   color: var(--ml-text-primary);
-  font-size: 1.08rem;
-  font-weight: 670;
+  @include ui.card-value(1.08rem, 670);
   line-height: 1.25;
 }
 

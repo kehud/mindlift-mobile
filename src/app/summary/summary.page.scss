@@ -101,8 +101,7 @@
 
 .summary-stat strong {
   color: var(--ml-text-primary);
-  font-size: 1.331rem;
-  font-weight: 750;
+  @include ui.card-value(1.331rem, 750);
   overflow-wrap: anywhere;
   text-align: end;
 }
@@ -123,16 +122,15 @@
 }
 
 .summary-done {
-  @include ui.primary-cta;
+  @include ui.primary-cta(1.198rem);
   --border-radius: var(--ml-radius-sm);
   --box-shadow: 0 10px 20px rgba(var(--ml-accent-rgb), 0.24);
-  font-size: 1.198rem;
   margin: 0;
   min-height: 74px;
 }
 
 ion-button.summary-done::part(native) {
-  font-size: 1.198rem;
+  @include ui.primary-button-text(1.198rem);
 }
 
 .summary-done:active {
@@ -148,7 +146,7 @@ ion-button.summary-done::part(native) {
   color: var(--ml-text-secondary);
   display: inline-flex;
   font: inherit;
-  font-size: 0.999rem;
+  @include ui.secondary-button-text(0.999rem);
   gap: 5px;
   justify-content: center;
   justify-self: center;
@@ -157,7 +155,7 @@ ion-button.summary-done::part(native) {
 }
 
 .summary-share > span {
-  font-size: 0.999rem;
+  @include ui.secondary-button-text(0.999rem);
 }
 
 .summary-share ion-icon {
