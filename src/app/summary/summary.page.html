@@ -1,43 +1,39 @@
-<ion-header [translucent]="true">
-  <ion-toolbar class="summary-toolbar">
-    <ion-title>WORKOUT COMPLETE</ion-title>
-  </ion-toolbar>
-</ion-header>
-
 <ion-content [fullscreen]="true" class="summary-content">
   <main class="summary-shell" *ngIf="session as workout">
     <section class="summary-hero" aria-labelledby="summary-title">
       <div class="completion-mark" aria-hidden="true">
         <ion-icon name="checkmark"></ion-icon>
       </div>
-      <p class="eyebrow">MINDFLIFT</p>
-      <h1 id="summary-title">Workout complete.</h1>
-      <p>You showed up for yourself. That counts.</p>
+      <h1 id="summary-title">Workout Complete!</h1>
+      <p>You showed up for yourself.</p>
     </section>
 
     <section class="summary-stats" aria-label="Workout summary">
       <div class="summary-stat">
         <span>Duration</span>
-        <strong>{{ workout.durationMinutes }} min</strong>
+        <strong>{{ workout.durationMinutes }}:00</strong>
       </div>
       <div class="summary-stat">
-        <span>Focus</span>
-        <strong>{{ workout.workoutType | titlecase }}</strong>
+        <span>Reps Used</span>
+        <strong>3</strong>
       </div>
       <div class="summary-stat">
-        <span>Coaching style</span>
-        <strong>{{ workout.coachingTone | titlecase }}</strong>
-      </div>
-      <div class="summary-stat">
-        <span>Intention</span>
-        <strong>{{ workout.mainGoal }}</strong>
+        <span>Focus Score</span>
+        <strong>87%</strong>
       </div>
     </section>
 
-    <p class="summary-note">Great work. Keep building the practice.</p>
+    <section class="summary-actions" aria-label="Summary actions">
+      <p class="summary-note">Great work. Keep building.</p>
 
-    <ion-button class="summary-done" expand="block" (click)="done()">
-      Done
-    </ion-button>
+      <ion-button class="summary-done" expand="block" (click)="done()">
+        Done
+      </ion-button>
+
+      <button class="summary-share" type="button" disabled aria-label="Sharing is unavailable">
+        <ion-icon name="share-outline" aria-hidden="true"></ion-icon>
+        <span>Share</span>
+      </button>
+    </section>
   </main>
 </ion-content>
