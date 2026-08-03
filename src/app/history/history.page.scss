@@ -9,7 +9,12 @@
 }
 
 .history-toolbar ion-title {
-  @include ui.toolbar-title;
+  color: var(--ml-text-primary);
+  font-size: 0.82rem;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+  padding-inline: var(--ml-page-padding-inline-start-safe) var(--ml-page-padding-inline-end-safe);
+  text-align: start;
 }
 
 .history-content {
@@ -17,69 +22,60 @@
 }
 
 .history-shell {
-  @include ui.screen-shell(var(--ml-space-5), calc(108px + var(--ml-safe-bottom)));
-}
-
-.history-intro {
-  @include ui.page-intro;
-}
-
-.eyebrow {
-  @include ui.section-label;
-}
-
-.history-intro h1 {
-  @include ui.page-title;
-}
-
-.history-intro > p:last-child,
-.history-empty p {
-  @include ui.body-copy;
+  @include ui.screen-shell(var(--ml-space-3), calc(108px + var(--ml-safe-bottom)));
+  padding-block-start: var(--ml-space-3);
 }
 
 .history-empty {
-  @include ui.glass-card(18px);
-  @include ui.empty-state;
+  align-items: center;
+  display: grid;
+  gap: var(--ml-space-3);
+  justify-items: center;
+  margin-block-start: var(--ml-space-2);
+  padding: var(--ml-space-6) var(--ml-space-5);
+  text-align: center;
 }
 
 .history-empty__icon {
   align-items: center;
-  background: var(--ml-accent-soft);
+  background: color-mix(in srgb, var(--ml-accent-soft) 76%, transparent);
   border-radius: 50%;
   color: var(--ml-accent);
   display: flex;
-  font-size: 1.55rem;
-  height: 64px;
+  font-size: 1.15rem;
+  height: 46px;
   justify-content: center;
-  width: 64px;
+  width: 46px;
 }
 
 .history-empty__copy {
   display: grid;
-  gap: var(--ml-space-2);
+  gap: var(--ml-space-1);
 }
 
 .history-empty h2 {
   color: var(--ml-text-primary);
-  font-size: 1.22rem;
-  font-weight: 700;
+  font-size: 1rem;
+  font-weight: 650;
   letter-spacing: -0.03em;
-  line-height: 1.15;
+  line-height: 1.2;
   margin: 0;
 }
 
+.history-empty p {
+  @include ui.body-copy;
+  font-size: 0.8rem;
+  line-height: 1.45;
+  max-inline-size: 17rem;
+}
+
 .history-empty ion-button {
-  @include ui.primary-cta(0.9rem);
+  @include ui.primary-cta(0.78rem);
   margin: var(--ml-space-1) 0 0;
-  width: min(100%, 240px);
+  min-height: 42px;
+  width: min(100%, 180px);
 }
 
 .history-empty ion-button:active {
   @include ui.pressed;
-}
-
-@media (max-height: 680px) {
-  .history-empty {
-    padding-block: var(--ml-space-5);
-  }
 }
