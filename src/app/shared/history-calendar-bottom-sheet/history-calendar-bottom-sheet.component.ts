@@ -48,7 +48,7 @@ export class HistoryCalendarBottomSheetComponent implements OnChanges {
       || changes['selectedMonth']
     ) {
       this.displayedMonth = this.normalizedMonth(this.selectedMonth ?? this.availableMonths[0] ?? null);
-      this.selectedDate = this.firstWorkoutDateInMonth(this.displayedMonth);
+      this.selectedDate = this.initialSelectedDate(this.displayedMonth);
     }
   }
 
@@ -248,6 +248,20 @@ export class HistoryCalendarBottomSheetComponent implements OnChanges {
     const [year, monthNumber, day] = firstDateKey.split('-').map(Number);
 
     return new Date(year, monthNumber - 1, day);
+  }
+
+  private initialSelectedDate(month: Date | null): Date | null {
+    if (!month) {
+      return null;
+    }
+
+    const today = new Date();
+
+    if (today.getFullYear() === month.getFullYear() && today.getMonth() === month.getMonth()) {
+      return today;
+    }
+
+    return this.firstWorkoutDateInMonth(month);
   }
 
   private toDateKey(date: Date): string {
