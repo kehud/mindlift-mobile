@@ -1,0 +1,89 @@
+<ion-modal
+  #calendarModal
+  class="history-calendar-sheet"
+  [isOpen]="isOpen"
+  [breakpoints]="sheetBreakpoints"
+  [initialBreakpoint]="sheetBreakpoint"
+  [handle]="true"
+  [backdropDismiss]="true"
+  (didPresent)="fitToContent()"
+  (didDismiss)="dismissed.emit()"
+>
+  <ng-template>
+    <ion-content class="history-calendar-sheet__content" [scrollY]="false">
+      <section #calendarSurface class="history-calendar-sheet__surface" aria-labelledby="history-calendar-title">
+        <header class="history-calendar-sheet__header">
+          <div>
+            <h2 id="history-calendar-title">View Calendar</h2>
+            <p>Select a date to see your workouts</p>
+          </div>
+          <button type="button" class="history-calendar-sheet__close" (click)="dismissed.emit()" aria-label="Close calendar">
+            <ion-icon name="close" aria-hidden="true"></ion-icon>
+          </button>
+        </header>
+
+        <div class="history-calendar-sheet__month-navigation" *ngIf="displayedMonth">
+          <button
+            type="button"
+            class="history-calendar-sheet__month-button"
+            [disabled]="!canGoToPreviousMonth"
+            (click)="previousMonth()"
+            aria-label="Previous month with workouts"
+          >
+            <ion-icon name="chevron-back" aria-hidden="true"></ion-icon>
+          </button>
+          <h3>{{ monthLabel }}</h3>
+          <button
+            type="button"
+            class="history-calendar-sheet__month-button"
+            [disabled]="!canGoToNextMonth"
+            (click)="nextMonth()"
+            aria-label="Next month with workouts"
+          >
+            <ion-icon name="chevron-forward" aria-hidden="true"></ion-icon>
+          </button>
+        </div>
+
+        <div class="history-calendar-sheet__weekdays" aria-hidden="true">
+          <span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span>
+        </div>
+
+        <div class="history-calendar-sheet__grid" role="grid" [attr.aria-label]="monthLabel + ' workout calendar'">
+          <ng-container *ngFor="let day of calendarDays; trackBy: trackByDay">
+            <span *ngIf="!day.date" class="history-calendar-sheet__blank" aria-hidden="true"></span>
+            <button
+              *ngIf="day.date"
+              type="button"
+              class="history-calendar-sheet__day"
+              [class.has-workouts]="day.count > 0"
+              [class.is-selected]="isSelectedDay(day)"
+              [disabled]="day.count === 0"
+              [attr.aria-label]="(day.date | date: 'longDate') + (day.count ? ', ' + day.count + (day.count === 1 ? ' workout' : ' workouts') : ', no workouts')"
+              [attr.aria-pressed]="isSelectedDay(day)"
+              (click)="selectDay(day)"
+            >
+              <span>{{ day.date | date: 'd' }}</span>
+              <i *ngIf="day.count > 0" aria-hidden="true"></i>
+            </button>
+          </ng-container>
+        </div>
+
+        <p class="history-calendar-sheet__legend"><i aria-hidden="true"></i> Workout completed</p>
+
+        <button
+          *ngIf="selectedDate && selectedWorkoutCount > 0"
+          type="button"
+          class="history-calendar-sheet__selected-date"
+          (click)="chooseSelectedDate()"
+        >
+          <span class="history-calendar-sheet__selected-icon" aria-hidden="true"><ion-icon name="calendar-outline"></ion-icon></span>
+          <span>
+            <strong>{{ selectedDateLabel }}</strong>
+            <small>{{ selectedWorkoutCount }} {{ selectedWorkoutCount === 1 ? 'workout' : 'workouts' }}</small>
+          </span>
+          <ion-icon name="chevron-forward" aria-hidden="true"></ion-icon>
+        </button>
+      </section>
+    </ion-content>
+  </ng-template>
+</ion-modal>

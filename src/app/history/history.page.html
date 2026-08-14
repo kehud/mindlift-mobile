@@ -1,12 +1,10 @@
-<ion-header [translucent]="true">
-  <ion-toolbar class="history-toolbar">
-    <ion-title>History</ion-title>
-  </ion-toolbar>
-</ion-header>
-
 <ion-content [fullscreen]="true" class="history-content">
   <main class="history-shell">
-    <section class="history-empty" aria-labelledby="empty-history-title">
+    <header class="history-header">
+      <h1>History</h1>
+    </header>
+
+    <section *ngIf="!isLoading && workouts.length === 0" class="history-empty" aria-labelledby="empty-history-title">
       <div class="history-empty__icon" aria-hidden="true">
         <ion-icon name="pulse-outline"></ion-icon>
       </div>
@@ -19,7 +17,81 @@
         <ion-icon name="arrow-forward" slot="end" aria-hidden="true"></ion-icon>
       </ion-button>
     </section>
+
+    <ng-container *ngIf="!isLoading && workouts.length > 0">
+      <section class="history-progress" aria-labelledby="history-progress-month">
+        <button type="button" class="history-progress__month" (click)="openCalendar()" aria-label="Choose month from calendar">
+          <ion-icon name="calendar-outline" aria-hidden="true"></ion-icon>
+          <span id="history-progress-month">{{ monthLabel }}</span>
+          <ion-icon name="chevron-down" aria-hidden="true"></ion-icon>
+        </button>
+        <p>Your progress this month</p>
+
+        <div class="history-progress__stats" aria-label="Monthly workout progress">
+          <div class="history-progress__stat">
+            <ion-icon name="flame-outline" aria-hidden="true"></ion-icon>
+            <strong>{{ monthlyProgress.workouts }}</strong>
+            <span>Workouts</span>
+          </div>
+          <div class="history-progress__stat">
+            <ion-icon name="time-outline" aria-hidden="true"></ion-icon>
+            <strong>{{ monthlyProgress.actualMinutes }}</strong>
+            <span>Minutes</span>
+          </div>
+          <div class="history-progress__stat">
+            <ion-icon name="trophy-outline" aria-hidden="true"></ion-icon>
+            <strong>{{ monthlyProgress.dayStreak }}</strong>
+            <span>Day Streak</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="history-timeline" aria-label="Completed workouts">
+        <p class="history-timeline__heading">Your Workouts</p>
+
+        <section
+          *ngFor="let group of workoutGroups; trackBy: trackByGroupKey"
+          class="history-group"
+          [class.is-highlighted]="isHighlightedGroup(group)"
+          [attr.id]="groupElementId(group)"
+          [attr.aria-label]="group.label"
+        >
+          <h2>{{ group.label }}</h2>
+
+          <button
+            *ngFor="let workout of group.workouts; trackBy: trackByWorkoutId"
+            type="button"
+            class="history-workout"
+            [routerLink]="['/history/details', workout.id]"
+            [attr.aria-label]="formatWorkoutType(workout.workoutType) + ', ' + formatDuration(workout) + ', ' + formatCompletedTime(workout)"
+          >
+            <span class="history-workout__icon" aria-hidden="true"><ion-icon [name]="workoutIcon(workout.workoutType)"></ion-icon></span>
+            <span class="history-workout__copy">
+              <strong>{{ formatWorkoutType(workout.workoutType) }}</strong>
+              <small>{{ formatDuration(workout) }}</small>
+            </span>
+            <time [attr.datetime]="workout.completedAt?.toISOString()">{{ formatCompletedTime(workout) }}</time>
+            <ion-icon class="history-workout__chevron" name="chevron-forward" aria-hidden="true"></ion-icon>
+          </button>
+        </section>
+      </section>
+
+      <button type="button" class="history-calendar-trigger" (click)="openCalendar()">
+        <ion-icon name="calendar-outline" aria-hidden="true"></ion-icon>
+        <span>View Calendar</span>
+      </button>
+    </ng-container>
   </main>
 </ion-content>
+
+<app-history-calendar-bottom-sheet
+  [isOpen]="isCalendarOpen"
+  [availableMonths]="availableMonths"
+  [workoutCountsByDate]="workoutCountsByDate"
+  [selectedMonth]="selectedMonth"
+  (dismissed)="closeCalendar()"
+  (dateSelected)="previewCalendarDate($event)"
+  (dateChosen)="selectCalendarDate($event)"
+></app-history-calendar-bottom-sheet>
 
 <app-floating-navigation></app-floating-navigation>

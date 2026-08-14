@@ -9,9 +9,9 @@
 }
 
 .summary-shell {
-  @include ui.screen-shell(0, calc(var(--ml-safe-bottom) + var(--ml-space-4)), 420px);
+  @include ui.screen-shell(0, calc(var(--ml-safe-bottom) + var(--ml-space-4) + 79px), 420px);
   align-content: start;
-  padding-block-start: calc(var(--ml-safe-top) + 7rem);
+  padding-block-start: calc(var(--ml-safe-top) + 2rem);
   padding-inline: clamp(12px, 3.5vw, 16px);
 }
 
@@ -122,19 +122,16 @@
 }
 
 .summary-done {
-  @include ui.primary-cta(1.198rem);
-  --border-radius: var(--ml-radius-sm);
-  --box-shadow: 0 10px 20px rgba(var(--ml-accent-rgb), 0.24);
-  margin: 0;
-  min-height: 74px;
+  @include ui.primary-bottom-cta;
+  @include ui.primary-bottom-cta-position;
 }
 
 ion-button.summary-done::part(native) {
-  @include ui.primary-button-text(1.198rem);
+  @include ui.primary-button-text(ui.$primary-bottom-cta-text-size);
 }
 
 .summary-done:active {
-  @include ui.pressed;
+  opacity: 0.92;
 }
 
 .summary-share {
@@ -160,6 +157,20 @@ ion-button.summary-done::part(native) {
 
 .summary-share ion-icon {
   font-size: 0.86rem;
+}
+
+@media (max-height: 700px) {
+  .completion-mark {
+    margin-block-end: 1.5rem;
+  }
+
+  .summary-stats {
+    margin-block-start: 1.5rem;
+  }
+
+  .summary-actions {
+    margin-block-start: 1.5rem;
+  }
 }
 
 :host-context(:root[data-theme='light']) .completion-mark,

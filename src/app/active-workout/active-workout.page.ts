@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import type { WorkoutEngineRuntimeSnapshot } from '../core/workout-engine/models/workout-engine-runtime.models';
 import type { WorkoutStep } from '../core/workout-engine/models/workout-timeline.models';
 import { WorkoutEngineService } from '../core/workout-engine/workout-engine.service';
+import { WorkoutHistoryService } from '../core/workout-history/workout-history.service';
 import { WorkoutSession } from '../core/workout-session/workout-session.model';
 import { WorkoutSessionService } from '../core/workout-session/workout-session.service';
 
@@ -21,9 +22,11 @@ interface ActiveCueContent {
 export class ActiveWorkoutPage {
   private readonly router = inject(Router);
   private readonly workoutEngine = inject(WorkoutEngineService);
+  private readonly workoutHistory = inject(WorkoutHistoryService);
   private readonly workoutSessionService = inject(WorkoutSessionService);
 
   private navigatingToSummary = false;
+  private finishWorkoutPromise: Promise<void> | null = null;
   private readonly sessionState = signal<WorkoutSession | null>(null);
 
   readonly session = this.sessionState.asReadonly();
@@ -85,6 +88,7 @@ export class ActiveWorkoutPage {
 
   async ionViewWillEnter(): Promise<void> {
     this.navigatingToSummary = false;
+    this.finishWorkoutPromise = null;
     this.isLoading.set(true);
 
     const session = await this.workoutSessionService.initializeFromSetup();
@@ -106,8 +110,26 @@ export class ActiveWorkoutPage {
     this.workoutEngine.pause();
   }
 
-  async finishWorkout(): Promise<void> {
+  finishWorkout(): Promise<void> {
+    if (this.finishWorkoutPromise) {
+      return this.finishWorkoutPromise;
+    }
+
+    this.finishWorkoutPromise = this.completeAndNavigate().catch((error: unknown) => {
+      this.finishWorkoutPromise = null;
+      throw error;
+    });
+
+    return this.finishWorkoutPromise;
+  }
+
+  private async completeAndNavigate(): Promise<void> {
     this.sessionState.set(this.workoutSessionService.completeCurrentSession());
+    const session = this.session();
+
+    if (session?.status === 'completed') {
+      await this.workoutHistory.saveCompletedWorkout(session);
+    }
 
     await this.navigateToSummary();
   }

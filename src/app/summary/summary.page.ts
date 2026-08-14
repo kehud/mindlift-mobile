@@ -33,6 +33,6 @@ export class SummaryPage {
     this.workoutSessionService.clearSession();
     this.workoutSetupState.reset();
 
-    await this.router.navigateByUrl('/home');
+    await this.router.navigateByUrl('/history');
   }
 }

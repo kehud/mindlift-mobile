@@ -1,0 +1,57 @@
+<ion-content [fullscreen]="true" class="history-detail-content">
+  <main class="history-detail-shell">
+    <button type="button" class="history-detail-back" (click)="backToHistory()" aria-label="Back to History">
+      <ion-icon name="chevron-back" aria-hidden="true"></ion-icon>
+    </button>
+
+    <section *ngIf="isLoading" class="history-detail-message" aria-live="polite">Loading workout…</section>
+
+    <section *ngIf="!isLoading && loadFailed" class="history-detail-message history-detail-message--error" aria-live="polite">
+      <p>This workout is no longer available.</p>
+      <button type="button" (click)="backToHistory()">Back to History</button>
+    </section>
+
+    <ng-container *ngIf="!isLoading && workout as selectedWorkout">
+      <section class="history-detail-hero" aria-labelledby="workout-detail-title">
+        <div class="history-detail-hero__icon" aria-hidden="true">
+          <ion-icon [name]="workoutIcon(selectedWorkout.workoutType)"></ion-icon>
+        </div>
+        <div class="history-detail-hero__copy">
+          <h1 id="workout-detail-title">{{ formatWorkoutType(selectedWorkout.workoutType) }}</h1>
+          <p class="history-detail-complete" *ngIf="selectedWorkout.status">
+            <ion-icon name="checkmark" aria-hidden="true"></ion-icon> {{ formatStatus(selectedWorkout.status) }}
+          </p>
+          <p class="history-detail-date" *ngIf="selectedWorkout.completedAt">
+            <ion-icon name="calendar-outline" aria-hidden="true"></ion-icon>
+            {{ formatDateRange(selectedWorkout) }}
+          </p>
+        </div>
+      </section>
+
+      <section class="history-detail-summary" aria-labelledby="workout-summary-title">
+        <h2 id="workout-summary-title">Summary</h2>
+
+        <div class="history-detail-summary__row" *ngIf="selectedWorkout.durationMinutes !== null">
+          <ion-icon name="time-outline" aria-hidden="true"></ion-icon>
+          <span>Duration</span>
+          <strong>{{ formatDuration(selectedWorkout) }}</strong>
+        </div>
+        <div class="history-detail-summary__row" *ngIf="selectedWorkout.coachingTone">
+          <ion-icon name="chatbubbles-outline" aria-hidden="true"></ion-icon>
+          <span>Coaching Style</span>
+          <strong>{{ formatCoachingTone(selectedWorkout.coachingTone) }}</strong>
+        </div>
+        <div class="history-detail-summary__row" *ngIf="selectedWorkout.mainGoal">
+          <ion-icon name="locate-outline" aria-hidden="true"></ion-icon>
+          <span>Main Goal</span>
+          <strong>{{ selectedWorkout.mainGoal }}</strong>
+        </div>
+        <div class="history-detail-summary__row" *ngIf="selectedWorkout.completionReason">
+          <ion-icon name="flag-outline" aria-hidden="true"></ion-icon>
+          <span>Completion</span>
+          <strong>{{ formatCompletionReason(selectedWorkout.completionReason) }}</strong>
+        </div>
+      </section>
+    </ng-container>
+  </main>
+</ion-content>

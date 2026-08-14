@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 
 import type { WorkoutEngineRuntimeSnapshot } from '../core/workout-engine/models/workout-engine-runtime.models';
 import { WorkoutEngineService } from '../core/workout-engine/workout-engine.service';
+import { WorkoutHistoryService } from '../core/workout-history/workout-history.service';
 import type { WorkoutSession } from '../core/workout-session/workout-session.model';
 import { WorkoutSessionService } from '../core/workout-session/workout-session.service';
 import { ActiveWorkoutPage } from './active-workout.page';
@@ -11,12 +12,18 @@ import { ActiveWorkoutPage } from './active-workout.page';
 describe('ActiveWorkoutPage automatic completion integration', () => {
   let fixture: ComponentFixture<ActiveWorkoutPage>;
   let router: jasmine.SpyObj<Router>;
+  let workoutHistoryService: jasmine.SpyObj<WorkoutHistoryService>;
   let workoutSessionService: jasmine.SpyObj<WorkoutSessionService>;
   let engineSnapshot: WritableSignal<WorkoutEngineRuntimeSnapshot | null>;
 
   beforeEach(async () => {
     router = jasmine.createSpyObj<Router>('Router', ['navigateByUrl']);
     router.navigateByUrl.and.resolveTo(true);
+    workoutHistoryService = jasmine.createSpyObj<WorkoutHistoryService>(
+      'WorkoutHistoryService',
+      ['saveCompletedWorkout'],
+    );
+    workoutHistoryService.saveCompletedWorkout.and.resolveTo();
     workoutSessionService = jasmine.createSpyObj<WorkoutSessionService>(
       'WorkoutSessionService',
       ['initializeFromSetup', 'completeCurrentSession'],
@@ -29,6 +36,7 @@ describe('ActiveWorkoutPage automatic completion integration', () => {
       providers: [
         { provide: Router, useValue: router },
         { provide: WorkoutEngineService, useValue: { snapshot: engineSnapshot } },
+        { provide: WorkoutHistoryService, useValue: workoutHistoryService },
         { provide: WorkoutSessionService, useValue: workoutSessionService },
       ],
     })
