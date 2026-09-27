@@ -23,7 +23,7 @@ export const WORKOUT_CUE_INTERVAL_SECONDS_BY_LEVEL = {
 } as const satisfies Record<WorkoutCueIntervalLevel, number>;
 
 export const WORKOUT_FIRST_MAIN_CUE_OFFSET_SECONDS = 120;
-export const WORKOUT_CLOSING_LEAD_SECONDS = 60;
+export const WORKOUT_WARMUP_DURATION_RATIO = 0.1;
 export const WORKOUT_MINIMUM_CUE_GAP_SECONDS = 90;
 export const WORKOUT_MISSED_CUE_THRESHOLD_SECONDS = 60;
 export const WORKOUT_BOOST_COOLDOWN_SECONDS = 30;

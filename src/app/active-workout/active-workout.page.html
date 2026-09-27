@@ -21,7 +21,7 @@
 
       <section class="progress-region" aria-label="Workout progress">
         <div class="phase-row">
-          <span>{{ activeStep()?.title || 'Warm up' }}</span>
+          <span>{{ activeStep()?.title || 'Warm-up' }}</span>
           <time [attr.aria-label]="'Elapsed time ' + elapsedTime()">{{ elapsedTime() }}</time>
           <span>Finish</span>
         </div>
@@ -41,7 +41,7 @@
         <div class="pulse-line" aria-hidden="true">
           <span *ngFor="let bar of [12, 19, 30, 17, 24, 39, 21, 16, 29, 43, 26, 14, 20, 34, 19, 12]"></span>
         </div>
-        <p class="cue-copy">{{ cueContent().text }}</p>
+        <p class="cue-copy" dir="auto">{{ cueContent().text }}</p>
       </section>
 
       <footer class="workout-actions">

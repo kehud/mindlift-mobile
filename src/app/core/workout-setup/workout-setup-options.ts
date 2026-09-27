@@ -4,17 +4,16 @@ export interface WorkoutSetupOption<TValue extends number | string> {
 }
 
 export const WORKOUT_TYPE_OPTIONS = [
-  { value: 'strength', label: 'Strength' },
-  { value: 'cardio', label: 'Cardio' },
-  { value: 'mobility', label: 'Mobility' },
-  { value: 'yoga', label: 'Yoga' },
+  { value: 'full-body', label: 'Full Body' },
+  { value: 'upper-body', label: 'Upper Body' },
+  { value: 'push', label: 'Push' },
+  { value: 'pull', label: 'Pull' },
+  { value: 'legs', label: 'Legs' },
 ] as const satisfies readonly WorkoutSetupOption<string>[];
 
 export const COACHING_TONE_OPTIONS = [
-  { value: 'supportive', label: 'Supportive' },
-  { value: 'direct', label: 'Direct' },
   { value: 'calm', label: 'Calm' },
-  { value: 'high-energy', label: 'High energy' },
+  { value: 'high-energy', label: 'High Energy' },
 ] as const satisfies readonly WorkoutSetupOption<string>[];
 
 export const WORKOUT_DURATION_OPTIONS = [

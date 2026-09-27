@@ -80,7 +80,7 @@ export const FALLBACK_CUE_TEMPLATES = [
   createFallbackTemplate({
     id: 'fallback-completion-reflection',
     slot: 'completion',
-    stepType: 'cooldown',
+    stepType: 'work',
     category: 'reflection',
     timing: 'before-step',
     priority: 'high',

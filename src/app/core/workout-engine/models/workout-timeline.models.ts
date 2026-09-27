@@ -92,6 +92,7 @@ export interface WorkoutCue {
 export interface WorkoutAudio {
   id: WorkoutAudioId;
   role: WorkoutAudioRole;
+  voiceKey?: string;
   sourceUrl: string;
   durationSeconds?: number;
   transcript?: string;

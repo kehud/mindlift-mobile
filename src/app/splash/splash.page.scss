@@ -1,3 +1,40 @@
 :host {
   display: block;
 }
+
+.splash-content {
+  --background: var(--ml-accent);
+  --color: var(--ml-accent-contrast);
+}
+
+.splash-shell {
+  align-content: center;
+  box-sizing: border-box;
+  color: var(--ml-accent-contrast);
+  display: grid;
+  justify-items: center;
+  min-block-size: 100%;
+  padding: var(--ml-page-padding-top-safe) var(--ml-page-padding-inline-end-safe) var(--ml-page-padding-bottom-safe) var(--ml-page-padding-inline-start-safe);
+  text-align: center;
+}
+
+.splash-shell h1,
+.splash-shell p {
+  margin: 0;
+}
+
+.splash-shell h1 {
+  font-size: clamp(2.4rem, 11vw, 3.4rem);
+  letter-spacing: -0.06em;
+}
+
+.splash-shell p {
+  font-size: 1rem;
+  margin-block-start: var(--ml-space-2);
+  opacity: 0.86;
+}
+
+.splash-shell ion-spinner {
+  --color: var(--ml-accent-contrast);
+  margin-block-start: var(--ml-space-6);
+}

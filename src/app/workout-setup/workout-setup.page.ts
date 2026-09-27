@@ -167,15 +167,19 @@ export class WorkoutSetupPage {
     switch (this.activeSheet) {
       case 'workoutType':
         this.workoutType = value as WorkoutType;
+        this.workoutSetupState.setWorkoutType(this.workoutType);
         break;
       case 'duration':
         this.durationMinutes = value as WorkoutDuration;
+        this.workoutSetupState.setDurationMinutes(this.durationMinutes);
         break;
       case 'coachingTone':
         this.coachingTone = value as CoachingTone;
+        this.workoutSetupState.setCoachingTone(this.coachingTone);
         break;
       case 'mainGoal':
         this.mainGoal = value as string;
+        this.workoutSetupState.setMainGoal(this.mainGoal);
         break;
       default:
         return;

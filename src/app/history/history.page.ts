@@ -198,14 +198,14 @@ export class HistoryPage {
 
   workoutIcon(workoutType: WorkoutHistoryEntry['workoutType']): string {
     switch (workoutType) {
-      case 'strength':
+      case 'full-body':
+      case 'push':
+      case 'pull':
         return 'barbell-outline';
-      case 'cardio':
+      case 'legs':
         return 'walk-outline';
-      case 'mobility':
+      case 'upper-body':
         return 'body-outline';
-      case 'yoga':
-        return 'leaf-outline';
       default:
         return 'body-outline';
     }

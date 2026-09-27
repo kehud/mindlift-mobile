@@ -9,6 +9,8 @@ import type {
 } from './models/workout-timeline.models';
 import { WORKOUT_MISSED_CUE_THRESHOLD_SECONDS } from './workout-timeline-generation.constants';
 import { WorkoutEngineService } from './workout-engine.service';
+import { WorkoutContentService } from './workout-content.service';
+import { generateWorkoutTimeline } from './workout-timeline-generator';
 
 describe('WorkoutEngineService', () => {
   let service: WorkoutEngineService;
@@ -20,6 +22,44 @@ describe('WorkoutEngineService', () => {
   afterEach(() => {
     service.ngOnDestroy();
   });
+
+  it('runs a generated 10-minute workout with a 60-second warm-up and completes at 600 seconds', fakeAsync(() => {
+    const timeline = generateWorkoutTimeline({
+      workoutType: 'strength', durationMinutes: 10, plannedDurationSeconds: 600,
+      coachingTone: 'calm', language: 'he', mainGoal: 'stay focused',
+    }, new WorkoutContentService().getCueTemplates());
+    service.initialize(timeline);
+    service.start();
+
+    expect(expectSnapshot().activeStepId).toBe(timeline.steps[0].id);
+    expect(expectSnapshot().remainingSeconds).toBe(600);
+    expect(expectSnapshot().currentCue?.templateId).toBe('female_relaxed_warmup_01');
+    expect(expectSnapshot().currentCue?.audioId).toBe(timeline.audio[0].id);
+    tick(59000);
+    expect(expectSnapshot().activeStepId).toBe(timeline.steps[0].id);
+
+    service.pause();
+    tick(5000);
+    expect(expectSnapshot().elapsedSeconds).toBe(59);
+    expect(expectSnapshot().activeStepId).toBe(timeline.steps[0].id);
+    service.resume();
+    tick(1000);
+    expect(expectSnapshot().elapsedSeconds).toBe(60);
+    expect(expectSnapshot().activeStepId).toBe(timeline.steps[1].id);
+    expect(expectSnapshot().remainingSeconds).toBe(540);
+    expect(service.cueEvents().filter((event) => event.cueId === timeline.cues[0].id).length).toBe(1);
+
+    tick(539000);
+    expect(expectSnapshot().elapsedSeconds).toBe(599);
+    expect(expectSnapshot().activeStepId).toBe(timeline.steps[1].id);
+    expect(expectSnapshot().status).toBe('running');
+    tick(1000);
+    expect(expectSnapshot().elapsedSeconds).toBe(600);
+    expect(expectSnapshot().remainingSeconds).toBe(0);
+    expect(expectSnapshot().status).toBe('completed');
+    expect(expectSnapshot().completionReason).toBe('timeline_completed');
+    cleanupTimers();
+  }));
 
   it('initialize creates an idle runtime', fakeAsync(() => {
     service.initialize(createTimeline());

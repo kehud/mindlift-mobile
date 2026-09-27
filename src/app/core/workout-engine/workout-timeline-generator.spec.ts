@@ -1,3 +1,5 @@
+import { WORKOUT_TYPE_OPTIONS } from '../workout-setup/workout-setup-options';
+import { WorkoutContentService } from './workout-content.service';
 import type { WorkoutCueTemplate } from './models/workout-cue-template.models';
 import type {
   WorkoutCue,
@@ -16,19 +18,89 @@ import {
 import type { WorkoutTimelineGenerationInput } from './workout-timeline-generator';
 
 describe('generateWorkoutTimeline', () => {
+  for (const { value: workoutType } of WORKOUT_TYPE_OPTIONS) {
+    it(`uses the local Hebrew calm opening recording for ${workoutType}`, () => {
+      const templates = new WorkoutContentService().getCueTemplates();
+      const input = createInput({ workoutType, language: 'he', coachingTone: 'calm' });
+      const timeline = generateWorkoutTimeline(input, templates);
+      const opening = getOpeningCue(timeline);
+      const audio = timeline.audio[0];
+      const fallbackTimeline = generateWorkoutTimeline(input, []);
+
+      expect(templates.length).toBe(1);
+      expect(opening.templateId).toBe('female_relaxed_warmup_01');
+      expect(opening.text).toBe('הגעת לאימון, זה כבר הניצחון הראשון שלך.');
+      expect(opening.channel).toBe('spoken');
+      expect(opening.timing).toBe('before-step');
+      expect(opening.offsetSeconds).toBe(0);
+      expect(timeline.steps[0].type).toBe('warmup');
+      expect(timeline.audio.length).toBe(1);
+      expect(opening.audioId).toBeDefined();
+      expect(audio).toEqual({
+        id: opening.audioId!,
+        role: 'voice',
+        voiceKey: 'female',
+        sourceUrl: 'assets/audio/female/relaxed/warmup/female_relaxed_warmup_01.mp3',
+        transcript: opening.text,
+        cueId: opening.id,
+      });
+      expect(timeline.steps[0].audioIds).toEqual([audio.id]);
+      expect(timeline.cues.slice(1)).toEqual(fallbackTimeline.cues.slice(1));
+      expect(timeline.steps.slice(1)).toEqual(fallbackTimeline.steps.slice(1));
+      expect(timeline.completion).toEqual(fallbackTimeline.completion);
+      expect(generateWorkoutTimeline(input, templates)).toEqual(timeline);
+    });
+  }
+
+  for (const selection of [
+    { language: 'en', coachingTone: 'calm' },
+    { language: 'he', coachingTone: 'supportive' },
+    { language: 'he', coachingTone: 'direct' },
+    { language: 'he', coachingTone: 'high-energy' },
+  ] as const) {
+    it(`preserves fallback behavior for ${selection.language} + ${selection.coachingTone}`, () => {
+      const input = createInput(selection);
+      const timeline = generateWorkoutTimeline(input, new WorkoutContentService().getCueTemplates());
+
+      expect(timeline).toEqual(generateWorkoutTimeline(input, []));
+      expect(timeline.audio).toEqual([]);
+      expect(timeline.cues.every((cue) => cue.audioId === undefined)).toBeTrue();
+    });
+  }
+
+  for (const [plannedDurationSeconds, warmupSeconds] of [
+    [600, 60], [1200, 120], [1800, 180], [2700, 270], [607.9, 60], [30, 3], [0, 0],
+  ]) {
+    it(`splits ${plannedDurationSeconds} seconds into warm-up and workout without cooldown`, () => {
+      const timeline = generateWorkoutTimeline(createInput({ plannedDurationSeconds }), []);
+      const duration = Math.floor(plannedDurationSeconds);
+      expect(timeline.steps.map((step) => ({
+        type: step.type, title: step.title, start: step.startOffsetSeconds, duration: step.durationSeconds,
+      }))).toEqual([
+        { type: 'warmup', title: 'Warm-up', start: 0, duration: warmupSeconds },
+        { type: 'work', title: 'Workout', start: warmupSeconds, duration: duration - warmupSeconds },
+      ]);
+      expect(timeline.totalDurationSeconds).toBe(duration);
+      expect(getClosingCue(timeline).offsetSeconds).toBe(duration);
+      expect(getClosingCue(timeline).stepId).toBe(timeline.steps[1].id);
+      expect(getClosingCue(timeline).templateId).toBe('fallback-completion-reflection');
+      expect(getMainCues(timeline).every((cue) => cue.offsetSeconds >= warmupSeconds)).toBeTrue();
+    });
+  }
+
   it('places the opening cue at 0', () => {
     const timeline = generateWorkoutTimeline(createInput(), createTemplates());
 
     expect(getOpeningCue(timeline).offsetSeconds).toBe(0);
   });
 
-  it('clamps the closing cue safely for short workouts', () => {
+  it('places the completion cue at the planned end even for short workouts', () => {
     const timeline = generateWorkoutTimeline(
       createInput({ plannedDurationSeconds: 30 }),
       createTemplates(),
     );
 
-    expect(getClosingCue(timeline).offsetSeconds).toBe(0);
+    expect(getClosingCue(timeline).offsetSeconds).toBe(30);
   });
 
   it('produces no main cues for workouts up to 5 minutes', () => {
@@ -236,7 +308,7 @@ function createClosingTemplate(): WorkoutCueTemplate {
   return createTemplate({
     id: 'closing-template',
     slot: 'completion',
-    stepTypes: ['cooldown'],
+    stepTypes: ['work'],
     category: 'reflection',
     timing: 'before-step',
     priority: 'high',
@@ -282,11 +354,13 @@ function getOpeningCue(timeline: WorkoutTimeline): WorkoutCue {
 }
 
 function getMainCues(timeline: WorkoutTimeline): readonly WorkoutCue[] {
-  return timeline.steps[1].cueIds.map((cueId) => getCueById(timeline, cueId));
+  return timeline.steps[1].cueIds
+    .filter((cueId) => !timeline.completion.cueIds.includes(cueId))
+    .map((cueId) => getCueById(timeline, cueId));
 }
 
 function getClosingCue(timeline: WorkoutTimeline): WorkoutCue {
-  return getCueById(timeline, timeline.steps[2].cueIds[0]);
+  return getCueById(timeline, timeline.completion.cueIds[0]);
 }
 
 function getCueById(timeline: WorkoutTimeline, cueId: string): WorkoutCue {

@@ -15,7 +15,10 @@ export class SplashPage implements OnInit {
   private readonly router = inject(Router);
 
   async ngOnInit(): Promise<void> {
-    await firstValueFrom(this.authService.authInitializationComplete$);
+    await Promise.all([
+      firstValueFrom(this.authService.authInitializationComplete$),
+      new Promise<void>((resolve) => window.setTimeout(resolve, 2000)),
+    ]);
     const user = await firstValueFrom(this.authService.currentUser$);
 
     try {

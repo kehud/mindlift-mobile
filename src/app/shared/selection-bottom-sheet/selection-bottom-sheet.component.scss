@@ -6,15 +6,28 @@
   --background: var(--ml-surface-raised);
   --border-radius: 24px 24px 0 0;
   --box-shadow: 0 -16px 48px rgba(0, 0, 0, 0.28);
+  --height: auto;
+}
+
+.selection-bottom-sheet ::ng-deep .ion-page {
+  contain: content;
+  position: relative;
 }
 
 .selection-bottom-sheet__content {
   --background: var(--ml-surface-raised);
+  contain: none;
+  flex: none;
+  height: auto;
+}
+
+.selection-bottom-sheet__content::part(scroll) {
+  position: relative;
 }
 
 .selection-bottom-sheet__surface {
   box-sizing: border-box;
-  padding: var(--ml-space-2) var(--ml-page-padding-inline-end-safe) var(--ml-safe-bottom) var(--ml-page-padding-inline-start-safe);
+  padding: var(--ml-space-2) var(--ml-page-padding-inline-end-safe) calc(var(--ml-safe-bottom) + var(--ml-space-4)) var(--ml-page-padding-inline-start-safe);
 }
 
 .selection-bottom-sheet h2 {

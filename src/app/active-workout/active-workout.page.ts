@@ -1,5 +1,6 @@
 import { Component, computed, effect, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
+import { AlertController } from '@ionic/angular';
 
 import type { WorkoutEngineRuntimeSnapshot } from '../core/workout-engine/models/workout-engine-runtime.models';
 import type { WorkoutStep } from '../core/workout-engine/models/workout-timeline.models';
@@ -20,6 +21,7 @@ interface ActiveCueContent {
   standalone: false,
 })
 export class ActiveWorkoutPage {
+  private readonly alertController = inject(AlertController);
   private readonly router = inject(Router);
   private readonly workoutEngine = inject(WorkoutEngineService);
   private readonly workoutHistory = inject(WorkoutHistoryService);
@@ -123,6 +125,37 @@ export class ActiveWorkoutPage {
     return this.finishWorkoutPromise;
   }
 
+  async canLeaveActiveWorkout(): Promise<boolean> {
+    if (!this.shouldConfirmWorkoutExit()) {
+      return true;
+    }
+
+    const alert = await this.alertController.create({
+      header: 'End workout?',
+      message: 'Your active workout is still running.',
+      buttons: [
+        {
+          text: 'Stay',
+          role: 'cancel',
+        },
+        {
+          text: 'Discard',
+          role: 'destructive',
+          handler: () => {
+            this.workoutSessionService.clearSession();
+            this.sessionState.set(null);
+          },
+        },
+      ],
+    });
+
+    await alert.present();
+
+    const { role } = await alert.onDidDismiss();
+
+    return role === 'destructive';
+  }
+
   private async completeAndNavigate(): Promise<void> {
     this.sessionState.set(this.workoutSessionService.completeCurrentSession());
     const session = this.session();
@@ -161,5 +194,16 @@ export class ActiveWorkoutPage {
     this.navigatingToSummary = true;
 
     await this.router.navigateByUrl('/summary');
+  }
+
+  private shouldConfirmWorkoutExit(): boolean {
+    if (this.navigatingToSummary || this.finishWorkoutPromise) {
+      return false;
+    }
+
+    const status = this.snapshot()?.status;
+
+    return this.session() !== null
+      && (status === 'running' || status === 'paused' || status === 'boosting');
   }
 }

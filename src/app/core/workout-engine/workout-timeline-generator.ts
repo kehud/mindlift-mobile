@@ -19,12 +19,12 @@ import type {
   WorkoutTimelineId,
 } from './models/workout-timeline.models';
 import {
-  WORKOUT_CLOSING_LEAD_SECONDS,
   WORKOUT_CUE_INTERVAL_SECONDS_BY_LEVEL,
   WORKOUT_FIRST_MAIN_CUE_OFFSET_SECONDS,
   WORKOUT_MAIN_CUE_DURATION_RULES,
   WORKOUT_MAIN_CUE_PATTERN,
   WORKOUT_MINIMUM_CUE_GAP_SECONDS,
+  WORKOUT_WARMUP_DURATION_RATIO,
 } from './workout-timeline-generation.constants';
 import type { WorkoutCueIntervalLevel } from './workout-timeline-generation.constants';
 import { FALLBACK_CUE_TEMPLATES } from './workout-timeline-fallbacks';
@@ -57,7 +57,6 @@ interface GeneratedCue {
   audio?: WorkoutAudio;
 }
 
-const WORKOUT_OPENING_DURATION_SECONDS = 60;
 const DEFAULT_CUE_INTERVAL_LEVEL: WorkoutCueIntervalLevel = 'medium';
 const TEMPLATE_VARIABLE_PATTERN = /\{\{\s*([a-zA-Z0-9_-]+)\s*\}\}/g;
 
@@ -69,7 +68,7 @@ export function generateWorkoutTimeline(
   const cueIntervalSeconds = WORKOUT_CUE_INTERVAL_SECONDS_BY_LEVEL[
     input.cueIntervalLevel ?? DEFAULT_CUE_INTERVAL_LEVEL
   ];
-  const closingCueOffsetSeconds = getClosingCueOffsetSeconds(plannedDurationSeconds);
+  const warmupDurationSeconds = Math.floor(plannedDurationSeconds * WORKOUT_WARMUP_DURATION_RATIO);
   const timelineId = input.timelineId ?? createStableId('timeline', [
     input.workoutType,
     input.durationMinutes,
@@ -83,7 +82,6 @@ export function generateWorkoutTimeline(
   const stepIds = {
     opening: createStableId('step', [timelineId, 'opening', 0]),
     workout: createStableId('step', [timelineId, 'workout', 1]),
-    closing: createStableId('step', [timelineId, 'closing', 2]),
   };
   const templateUseCounts = new Map<string, number>();
   const openingCue = buildCue({
@@ -95,7 +93,7 @@ export function generateWorkoutTimeline(
     offsetSeconds: 0,
     order: 0,
   }, input, timelineId, templates, templateUseCounts);
-  const mainCues = getMainCueOffsets(plannedDurationSeconds, cueIntervalSeconds).map((offsetSeconds, index) => buildCue({
+  const mainCues = getMainCueOffsets(plannedDurationSeconds, cueIntervalSeconds, warmupDurationSeconds).map((offsetSeconds, index) => buildCue({
     role: 'main',
     stepId: stepIds.workout,
     stepType: 'work',
@@ -106,20 +104,15 @@ export function generateWorkoutTimeline(
   }, input, timelineId, templates, templateUseCounts));
   const closingCue = buildCue({
     role: 'closing',
-    stepId: stepIds.closing,
-    stepType: 'cooldown',
+    stepId: stepIds.workout,
+    stepType: 'work',
     slot: 'completion',
     category: 'reflection',
-    offsetSeconds: closingCueOffsetSeconds,
+    offsetSeconds: plannedDurationSeconds,
     order: mainCues.length + 1,
   }, input, timelineId, templates, templateUseCounts);
   const cueResults = [openingCue, ...mainCues, closingCue];
-  const openingDurationSeconds = Math.min(
-    WORKOUT_OPENING_DURATION_SECONDS,
-    closingCueOffsetSeconds,
-  );
-  const workoutDurationSeconds = Math.max(closingCueOffsetSeconds - openingDurationSeconds, 0);
-  const closingDurationSeconds = Math.max(plannedDurationSeconds - closingCueOffsetSeconds, 0);
+  const workoutDurationSeconds = plannedDurationSeconds - warmupDurationSeconds;
 
   return {
     id: timelineId,
@@ -136,10 +129,10 @@ export function generateWorkoutTimeline(
       createStep(
         stepIds.opening,
         'warmup',
-        'Opening',
+        'Warm-up',
         'Prepare for the workout.',
         0,
-        openingDurationSeconds,
+        warmupDurationSeconds,
         [openingCue],
       ),
       createStep(
@@ -147,18 +140,9 @@ export function generateWorkoutTimeline(
         'work',
         'Workout',
         `Work toward ${input.mainGoal}.`,
-        openingDurationSeconds,
+        warmupDurationSeconds,
         workoutDurationSeconds,
-        mainCues,
-      ),
-      createStep(
-        stepIds.closing,
-        'cooldown',
-        'Closing',
-        'Close the workout and reflect.',
-        closingCueOffsetSeconds,
-        closingDurationSeconds,
-        [closingCue],
+        [...mainCues, closingCue],
       ),
     ],
     cues: cueResults.map((result) => result.cue),
@@ -222,6 +206,7 @@ function buildCue(
     ? {
       id: createStableId('audio', [timelineId, cueId, template.id]),
       role: template.audio.role,
+      ...(template.audio.voiceKey !== undefined ? { voiceKey: template.audio.voiceKey } : {}),
       sourceUrl: template.audio.sourceUrl,
       transcript: text,
       cueId,
@@ -302,6 +287,7 @@ function getTemplateSelectionKey(
 function getMainCueOffsets(
   plannedDurationSeconds: number,
   cueIntervalSeconds: number,
+  warmupDurationSeconds: number,
 ): readonly number[] {
   const cueLimit = getMainCueLimit(plannedDurationSeconds);
 
@@ -310,12 +296,11 @@ function getMainCueOffsets(
   }
 
   const intervalSeconds = Math.max(cueIntervalSeconds, WORKOUT_MINIMUM_CUE_GAP_SECONDS);
-  const latestOffsetSeconds = getClosingCueOffsetSeconds(plannedDurationSeconds)
-    - WORKOUT_MINIMUM_CUE_GAP_SECONDS;
+  const latestOffsetSeconds = plannedDurationSeconds - WORKOUT_MINIMUM_CUE_GAP_SECONDS;
   const offsets: number[] = [];
 
   for (
-    let offsetSeconds = WORKOUT_FIRST_MAIN_CUE_OFFSET_SECONDS;
+    let offsetSeconds = Math.max(WORKOUT_FIRST_MAIN_CUE_OFFSET_SECONDS, warmupDurationSeconds);
     offsetSeconds <= latestOffsetSeconds;
     offsetSeconds += intervalSeconds
   ) {
@@ -345,13 +330,6 @@ function getMainCueLimit(plannedDurationSeconds: number): number | null {
   }
 
   return null;
-}
-
-function getClosingCueOffsetSeconds(plannedDurationSeconds: number): number {
-  return Math.min(
-    Math.max(plannedDurationSeconds - WORKOUT_CLOSING_LEAD_SECONDS, 0),
-    plannedDurationSeconds,
-  );
 }
 
 function renderTemplateText(
