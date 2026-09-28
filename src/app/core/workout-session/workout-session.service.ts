@@ -1,8 +1,7 @@
 import { effect, inject, Injectable, OnDestroy } from '@angular/core';
-import { Capacitor } from '@capacitor/core';
-import { Haptics, ImpactStyle, NotificationType } from '@capacitor/haptics';
 
 import type { MindLiftLanguage } from '../i18n/language-direction.service';
+import type { WorkoutEngineRuntimeSnapshot } from '../workout-engine/models/workout-engine-runtime.models';
 import { WorkoutAudioAdapter } from '../workout-engine/workout-audio.adapter';
 import { WorkoutContentService } from '../workout-engine/workout-content.service';
 import { WorkoutEngineService } from '../workout-engine/workout-engine.service';
@@ -10,6 +9,7 @@ import type { WorkoutTimeline } from '../workout-engine/models/workout-timeline.
 import { generateWorkoutTimeline } from '../workout-engine/workout-timeline-generator';
 import { WorkoutSetupStateService } from '../workout-setup/workout-setup-state.service';
 import type { WorkoutSetup } from '../workout-setup/workout-setup.model';
+import { WorkoutHapticsService } from './workout-haptics.service';
 import type { WorkoutSession } from './workout-session.model';
 
 // MVP workout content is Hebrew independently of the application UI language.
@@ -22,8 +22,8 @@ export class WorkoutSessionService implements OnDestroy {
   private readonly workoutAudio = inject(WorkoutAudioAdapter);
   private readonly workoutContent = inject(WorkoutContentService);
   private readonly workoutEngine = inject(WorkoutEngineService);
+  private readonly workoutHaptics = inject(WorkoutHapticsService);
   private readonly workoutSetupState = inject(WorkoutSetupStateService);
-  private readonly isNativePlatform = Capacitor.isNativePlatform();
 
   private currentSession: WorkoutSession | null = null;
   private handledCueEventCount = 0;
@@ -33,7 +33,14 @@ export class WorkoutSessionService implements OnDestroy {
     const status = this.workoutEngine.snapshot()?.status;
     const session = this.currentSession;
 
-    if (!session || !status || status === 'idle' || status === 'completed') {
+    if (!session || !status || status === 'idle') {
+      this.workoutAudio.stop();
+      this.handledCueEventCount = cueEvents.length;
+      return;
+    }
+
+    if (status === 'completed') {
+      this.applyCompletedEngineSnapshot(this.workoutEngine.getSnapshot());
       this.workoutAudio.stop();
       this.handledCueEventCount = cueEvents.length;
       return;
@@ -112,7 +119,7 @@ export class WorkoutSessionService implements OnDestroy {
     this.handledCueEventCount = 0;
     this.workoutEngine.initialize(this.currentSession.timeline);
     this.workoutEngine.start();
-    void this.triggerWorkoutStartHaptic();
+    void this.workoutHaptics.workoutStarted();
 
     return this.getCurrentSession();
   }
@@ -129,22 +136,8 @@ export class WorkoutSessionService implements OnDestroy {
       engineSnapshot = this.workoutEngine.getSnapshot();
     }
 
-    if (!engineSnapshot || engineSnapshot.status !== 'completed') {
+    if (!this.applyCompletedEngineSnapshot(engineSnapshot)) {
       return this.getCurrentSession();
-    }
-
-    const wasCompleted = this.currentSession.status === 'completed';
-    this.workoutAudio.stop();
-    this.currentSession = {
-      ...this.currentSession,
-      actualDurationSeconds: engineSnapshot.elapsedSeconds,
-      completedAt: engineSnapshot.completedAt,
-      completionReason: engineSnapshot.completionReason,
-      status: 'completed',
-    };
-
-    if (!wasCompleted) {
-      void this.triggerWorkoutCompletionHaptic();
     }
 
     return this.getCurrentSession();
@@ -162,6 +155,28 @@ export class WorkoutSessionService implements OnDestroy {
     this.workoutAudio.reset();
   }
 
+  private applyCompletedEngineSnapshot(engineSnapshot: WorkoutEngineRuntimeSnapshot | null): boolean {
+    if (!this.currentSession || !engineSnapshot || engineSnapshot.status !== 'completed') {
+      return false;
+    }
+
+    const wasCompleted = this.currentSession.status === 'completed';
+    this.workoutAudio.stop();
+    this.currentSession = {
+      ...this.currentSession,
+      actualDurationSeconds: engineSnapshot.elapsedSeconds,
+      completedAt: engineSnapshot.completedAt,
+      completionReason: engineSnapshot.completionReason,
+      status: 'completed',
+    };
+
+    if (!wasCompleted) {
+      void this.workoutHaptics.workoutCompleted();
+    }
+
+    return true;
+  }
+
   private generateTimelineFromSetup(setup: WorkoutSetup, startedAt: Date): WorkoutTimeline {
     return generateWorkoutTimeline({
       workoutType: setup.workoutType!,
@@ -172,29 +187,5 @@ export class WorkoutSessionService implements OnDestroy {
       mainGoal: setup.mainGoal!,
       createdAt: startedAt,
     }, this.workoutContent.getCueTemplates());
-  }
-
-  private async triggerWorkoutStartHaptic(): Promise<void> {
-    if (!this.isNativePlatform) {
-      return;
-    }
-
-    try {
-      await Haptics.impact({ style: ImpactStyle.Medium });
-    } catch {
-      return;
-    }
-  }
-
-  private async triggerWorkoutCompletionHaptic(): Promise<void> {
-    if (!this.isNativePlatform) {
-      return;
-    }
-
-    try {
-      await Haptics.notification({ type: NotificationType.Success });
-    } catch {
-      return;
-    }
   }
 }
