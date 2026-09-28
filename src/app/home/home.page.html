@@ -18,6 +18,7 @@
       <span class="featured-workout__cta">Build your session <ion-icon name="arrow-forward" aria-hidden="true"></ion-icon></span>
     </a>
 
+    <ng-container *ngIf="dailyContent$ | async as dailyContent">
     <section class="quick-reset" aria-labelledby="quick-reset-title">
       <div class="secondary-card__topline">
         <p class="eyebrow">SMALL WIN</p>
@@ -27,12 +28,12 @@
         </span>
       </div>
       <div>
-        <h2 id="quick-reset-title">Take a mindful reset</h2>
-        <p>Choose a pace and let your next workout meet you there.</p>
+        <h2 id="quick-reset-title">{{ dailyContent.smallWin.title }}</h2>
+        <p>{{ dailyContent.smallWin.text }}</p>
       </div>
     </section>
 
-    <section class="daily-quote" aria-labelledby="daily-quote-title" *ngIf="dailyQuote$ | async as dailyQuote">
+    <section class="daily-quote" aria-labelledby="daily-quote-title">
       <div class="secondary-card__topline">
         <p class="eyebrow" id="daily-quote-title">DAILY QUOTE</p>
         <span class="secondary-card__icon" aria-hidden="true">
@@ -40,10 +41,11 @@
         </span>
       </div>
       <div class="daily-quote__content">
-        <blockquote>{{ dailyQuote.quote }}</blockquote>
-        <p class="daily-quote__person">{{ dailyQuote.person }}</p>
+        <blockquote>{{ dailyContent.quote.text }}</blockquote>
+        <p class="daily-quote__person">{{ dailyContent.quote.author }}</p>
       </div>
     </section>
+    </ng-container>
   </main>
 </ion-content>
 
