@@ -8,7 +8,8 @@
     <a class="featured-workout" routerLink="/workout-setup" aria-label="Set up a strength workout">
       <div class="featured-workout__topline">
         <span>START</span>
-        <ion-icon name="arrow-up-outline" aria-hidden="true"></ion-icon>
+        <!--ion-icon name="arrow-up-outline" aria-hidden="true"></ion-icon-->
+        <ion-icon name="pulse-outline" aria-hidden="true"></ion-icon>
       </div>
       <div>
         <h2>Strength Workout</h2>
@@ -18,13 +19,29 @@
     </a>
 
     <section class="quick-reset" aria-labelledby="quick-reset-title">
-      <div class="quick-reset__icon" aria-hidden="true">
-        <ion-icon name="sparkles-outline"></ion-icon>
+      <div class="secondary-card__topline">
+        <p class="eyebrow">SMALL WIN</p>
+        <span class="secondary-card__icon" aria-hidden="true">
+          <!--ion-icon name="sparkles-outline"></ion-icon-->
+          <ion-icon name="battery-charging-outline"></ion-icon>
+        </span>
       </div>
       <div>
-        <p class="eyebrow">SMALL WIN</p>
         <h2 id="quick-reset-title">Take a mindful reset</h2>
         <p>Choose a pace and let your next workout meet you there.</p>
+      </div>
+    </section>
+
+    <section class="daily-quote" aria-labelledby="daily-quote-title" *ngIf="dailyQuote$ | async as dailyQuote">
+      <div class="secondary-card__topline">
+        <p class="eyebrow" id="daily-quote-title">DAILY QUOTE</p>
+        <span class="secondary-card__icon" aria-hidden="true">
+          <ion-icon name="bookmarks-outline"></ion-icon>
+        </span>
+      </div>
+      <div class="daily-quote__content">
+        <blockquote>{{ dailyQuote.quote }}</blockquote>
+        <p class="daily-quote__person">{{ dailyQuote.person }}</p>
       </div>
     </section>
   </main>

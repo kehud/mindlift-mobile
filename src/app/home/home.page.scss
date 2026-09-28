@@ -132,27 +132,45 @@
 }
 
 .quick-reset {
-  align-items: flex-start;
   @include ui.glass-card;
-  display: flex;
-  gap: var(--ml-space-3);
+  background: var(--ml-accent-soft);
+  border: 1px solid color-mix(in srgb, var(--ml-surface-glass-border) 72%, var(--ml-text-muted));
+  display: grid;
+  gap: var(--ml-space-1);
   padding: var(--ml-space-4);
+  position: relative;
 }
 
-.quick-reset__icon {
+.secondary-card__topline {
+  padding-inline-end: 28px;
+}
+
+.secondary-card__icon {
   align-items: center;
-  background: var(--ml-accent-soft);
-  border-radius: 50%;
   color: var(--ml-accent);
   display: flex;
-  flex: 0 0 auto;
-  font-size: 1.15rem;
-  height: 40px;
+  font-size: 22px;
+  height: 22px;
   justify-content: center;
-  width: 40px;
+  opacity: 0.62;
+  position: absolute;
+  right: var(--ml-space-4);
+  top: var(--ml-space-4);
+  width: 22px;
 }
 
-.quick-reset h2 {
+.secondary-card__icon ion-icon {
+  font-size: 22px;
+}
+
+.daily-quote__mark {
+  font-size: 1rem;
+  line-height: 1;
+  transform: translateY(2px);
+}
+
+.quick-reset h2,
+.daily-quote blockquote {
   color: var(--ml-text-primary);
   font-size: 1rem;
   font-weight: 610;
@@ -161,5 +179,35 @@
 }
 
 .quick-reset .eyebrow {
+  font-weight: 675;
+}
+
+.daily-quote {
+  @include ui.glass-card;
+  background: var(--ml-surface-raised);
+  border: 1px solid color-mix(in srgb, var(--ml-surface-glass-border) 72%, var(--ml-text-muted));
+  display: grid;
+  gap: var(--ml-space-1);
+  padding: var(--ml-space-4);
+  position: relative;
+}
+
+.daily-quote__content {
+  flex: 1 1 auto;
+  min-inline-size: 0;
+}
+
+.daily-quote blockquote {
+  text-align: left;
+}
+
+.daily-quote__person {
+  @include ui.section-label;
+  color: var(--ml-accent);
+  margin: 0;
+  text-align: right;
+}
+
+.daily-quote .eyebrow {
   font-weight: 675;
 }

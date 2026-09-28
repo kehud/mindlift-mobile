@@ -11,6 +11,42 @@ interface HomeGreeting {
   text: string;
 }
 
+interface DailyQuote {
+  person: string;
+  quote: string;
+}
+
+const DAILY_QUOTES: DailyQuote[] = [
+  {
+    quote: '"Act as if what you do makes a difference. It does."',
+    person: 'William James',
+  },
+  {
+    quote: '"It always seems impossible until it\'s done."',
+    person: 'Nelson Mandela',
+  },
+  {
+    quote: '"Nothing will work unless you do."',
+    person: 'Maya Angelou',
+  },
+  {
+    quote: '"Do what you can, with what you have, where you are."',
+    person: 'Theodore Roosevelt',
+  },
+  {
+    quote: '"The best way out is always through."',
+    person: 'Robert Frost',
+  },
+  {
+    quote: '"If there is no struggle, there is no progress."',
+    person: 'Frederick Douglass',
+  },
+  {
+    quote: '"First say to yourself what you would be; and then do what you have to do."',
+    person: 'Epictetus',
+  },
+];
+
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
@@ -35,6 +71,10 @@ export class HomePage {
     switchMap((firstName) => timer(0, 60_000).pipe(
       map(() => this.getGreeting(firstName)),
     )),
+  );
+
+  readonly dailyQuote$ = timer(0, 60_000).pipe(
+    map(() => this.getDailyQuote()),
   );
 
   private getFirstName(displayName: string | null | undefined): string | null {
@@ -64,5 +104,12 @@ export class HomePage {
       icon,
       text: firstName ? `${greeting}, ${firstName}` : greeting,
     };
+  }
+
+  private getDailyQuote(): DailyQuote {
+    const today = new Date();
+    const dayIndex = Math.floor(Date.UTC(today.getFullYear(), today.getMonth(), today.getDate()) / 86_400_000);
+
+    return DAILY_QUOTES[dayIndex % DAILY_QUOTES.length];
   }
 }
