@@ -13,7 +13,7 @@
 }
 
 .home-shell {
-  @include ui.screen-shell(var(--ml-space-4), calc(108px + var(--ml-safe-bottom)));
+  @include ui.screen-shell(var(--ml-space-4), calc(116px + var(--ml-safe-bottom)));
   padding-block-start: var(--ml-page-padding-top-safe);
 }
 

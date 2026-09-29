@@ -1,12 +1,12 @@
 @use '../ui-kit/primitives' as ui;
 
 :host {
-  bottom: calc(var(--ml-safe-bottom) + var(--ml-space-3));
+  bottom: calc(var(--ml-safe-bottom) + var(--ml-space-4));
   display: block;
   left: 50%;
   position: fixed;
   transform: translateX(-50%);
-  width: min(calc(100% - (var(--ml-space-6) * 2)), 312px);
+  width: min(calc(100% - (var(--ml-space-5) * 2)), 336px);
   z-index: 20;
 }
 
@@ -35,7 +35,7 @@
 }
 
 .floating-navigation__item ion-icon {
-  font-size: 1.15rem;
+  font-size: 1.37rem;
   transition: transform 300ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
@@ -54,7 +54,7 @@
 
 :host-context(:root[data-theme='light']) .floating-navigation,
 :host-context(body[data-theme='light']) .floating-navigation {
-  background: color-mix(in srgb, var(--ml-surface-glass-strong) 92%, transparent);
+  background: rgba(255, 255, 255, 0.10);
   box-shadow: 0 12px 30px rgba(27, 25, 23, 0.1);
 }
 
@@ -64,25 +64,25 @@
 }
 
 :host(.home-navigation) {
-  width: min(calc(100% - 40px), 306px);
+  width: min(calc(100% - 40px), 336px);
 }
 
 :host(.home-navigation) .floating-navigation {
   border-radius: 29px;
   box-sizing: border-box;
-  min-block-size: 59px;
-  padding: 3.6px;
+  min-block-size: 66px;
+  padding: 5px;
 }
 
 :host(.home-navigation) .floating-navigation__item {
-  font-size: 0.7rem;
+  font-size: 0.72rem;
   font-weight: 630;
-  gap: 3.6px;
-  min-block-size: 50px;
+  gap: 5px;
+  min-block-size: 56px;
 }
 
 :host(.home-navigation) .floating-navigation__item ion-icon {
-  font-size: 1.19rem;
+  font-size: 1.3rem;
 }
 
 :host(.home-navigation) .floating-navigation__item.is-active ion-icon {
