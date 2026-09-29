@@ -24,6 +24,9 @@
 
 .settings-intro h1 {
   @include ui.page-title;
+  font-size: ui.$primary-page-title-size;
+  font-weight: 650;
+  margin: 0;
 }
 
 .settings-intro > p:last-child,
@@ -35,6 +38,7 @@
 .settings-card {
   @include ui.card-frame;
   background: color-mix(in srgb, var(--ml-surface-raised) 86%, transparent);
+  border: 1px solid color-mix(in srgb, var(--ml-surface-glass-border) 72%, var(--ml-text-muted));
   padding: var(--ml-space-5);
 }
 
