@@ -11,7 +11,7 @@
 .history-shell {
   box-sizing: border-box;
   margin-inline: auto;
-  max-width: 520px;
+  max-width: 460px;
   min-height: 100%;
   padding: calc(var(--ml-safe-top) + 23px) var(--ml-page-padding-inline-end-safe) calc(101px + var(--ml-safe-bottom)) var(--ml-page-padding-inline-start-safe);
 }
@@ -22,6 +22,9 @@
 
 .history-header h1 {
   @include ui.page-title;
+  font-size: ui.$primary-page-title-size;
+  font-weight: 650;
+  margin: 0;
 }
 
 .history-empty {
@@ -79,9 +82,9 @@
     radial-gradient(circle at 100% 4%, rgba(var(--ml-accent-rgb), 0.09), transparent 30%),
     linear-gradient(138deg, var(--ml-surface-raised), var(--ml-app-background));
   border: 1px solid color-mix(in srgb, var(--ml-accent) 42%, transparent);
-  border-radius: 21px;
+  border-radius: var(--ml-radius-lg);
   box-shadow: 0 0 23px rgba(var(--ml-accent-rgb), 0.08), inset 0 1px 0 var(--ml-surface-glass-border);
-  margin-block-start: 20px;
+  margin-block-start: var(--ml-space-4);
   padding: 21px 20px 18px;
 }
 
@@ -165,8 +168,8 @@
 
 .history-timeline {
   display: grid;
-  gap: 15px;
-  margin-block-start: 24px;
+  gap: var(--ml-space-3);
+  margin-block-start: var(--ml-space-4);
 }
 
 .history-timeline__heading,
@@ -198,9 +201,9 @@
 .history-workout {
   align-items: center;
   background: linear-gradient(135deg, var(--ml-surface-raised), var(--ml-app-background));
-  border: 1px solid var(--ml-surface-glass-border);
-  border-radius: 19px;
-  box-shadow: var(--ml-shadow-soft), inset 0 1px 0 var(--ml-surface-glass-border);
+  border: 1px solid color-mix(in srgb, var(--ml-surface-glass-border) 72%, var(--ml-text-muted));
+  border-radius: var(--ml-radius-lg);
+  box-shadow: var(--ml-shadow-soft);
   color: var(--ml-text-primary);
   display: grid;
   font: inherit;
