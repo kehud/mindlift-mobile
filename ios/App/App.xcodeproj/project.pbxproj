@@ -12,14 +12,44 @@
 		4D22ABE92AF431CB00220026 /* CapApp-SPM in Frameworks */ = {isa = PBXBuildFile; productRef = 4D22ABE82AF431CB00220026 /* CapApp-SPM */; };
 		50379B232058CBB4000EE86E /* capacitor.config.json in Resources */ = {isa = PBXBuildFile; fileRef = 50379B222058CBB4000EE86E /* capacitor.config.json */; };
 		504EC3081FED79650016851F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 504EC3071FED79650016851F /* AppDelegate.swift */; };
-		E2D54C9E301F7B8C00A1F001 /* AppViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2D54C9F301F7B8C00A1F001 /* AppViewController.swift */; };
-		E2D54C9C301F7B8C00A1F001 /* CoachingAudioSessionPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2D54C9D301F7B8C00A1F001 /* CoachingAudioSessionPlugin.swift */; };
-		E2D54C9B301F7B8C00A1F001 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2D54C9A301F7B8C00A1F001 /* SceneDelegate.swift */; };
 		504EC30D1FED79650016851F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 504EC30B1FED79650016851F /* Main.storyboard */; };
 		504EC30F1FED79650016851F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 504EC30E1FED79650016851F /* Assets.xcassets */; };
 		504EC3121FED79650016851F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 504EC3101FED79650016851F /* LaunchScreen.storyboard */; };
 		50B271D11FEDC1A000F3C39B /* public in Resources */ = {isa = PBXBuildFile; fileRef = 50B271D01FEDC1A000F3C39B /* public */; };
+		E2D54C9B301F7B8C00A1F001 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2D54C9A301F7B8C00A1F001 /* SceneDelegate.swift */; };
+		E2D54C9C301F7B8C00A1F001 /* CoachingAudioSessionPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2D54C9D301F7B8C00A1F001 /* CoachingAudioSessionPlugin.swift */; };
+		E2D54C9E301F7B8C00A1F001 /* AppViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2D54C9F301F7B8C00A1F001 /* AppViewController.swift */; };
+		E2D54CA0301F7B8C00A1F001 /* MindLiftLiveActivityPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2D54CA6301F7B8C00A1F001 /* MindLiftLiveActivityPlugin.swift */; };
+		E2D54CA1301F7B8C00A1F001 /* MindLiftWorkoutActivityAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2D54CA7301F7B8C00A1F001 /* MindLiftWorkoutActivityAttributes.swift */; };
+		E2D54CA2301F7B8C00A1F001 /* MindLiftWorkoutActivityAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2D54CA7301F7B8C00A1F001 /* MindLiftWorkoutActivityAttributes.swift */; };
+		E2D54CA3301F7B8C00A1F001 /* MindLiftLiveActivityBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2D54CAB301F7B8C00A1F001 /* MindLiftLiveActivityBundle.swift */; };
+		E2D54CA4301F7B8C00A1F001 /* MindLiftLiveActivityWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2D54CAC301F7B8C00A1F001 /* MindLiftLiveActivityWidget.swift */; };
+		E2D54CA5301F7B8C00A1F001 /* MindLiftLiveActivityExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = E2D54CA8301F7B8C00A1F001 /* MindLiftLiveActivityExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		E2D54CB5301F7B8C00A1F001 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 504EC2FC1FED79650016851F /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E2D54CB1301F7B8C00A1F001;
+			remoteInfo = MindLiftLiveActivityExtension;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		E2D54CB0301F7B8C00A1F001 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				E2D54CA5301F7B8C00A1F001 /* MindLiftLiveActivityExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		2FAD9762203C412B000D30F8 /* config.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = config.xml; sourceTree = "<group>"; };
@@ -27,15 +57,21 @@
 		50379B222058CBB4000EE86E /* capacitor.config.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = capacitor.config.json; sourceTree = "<group>"; };
 		504EC3041FED79650016851F /* App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = App.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		504EC3071FED79650016851F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		E2D54C9F301F7B8C00A1F001 /* AppViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppViewController.swift; sourceTree = "<group>"; };
-		E2D54C9D301F7B8C00A1F001 /* CoachingAudioSessionPlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoachingAudioSessionPlugin.swift; sourceTree = "<group>"; };
-		E2D54C9A301F7B8C00A1F001 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		504EC30C1FED79650016851F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		504EC30E1FED79650016851F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		504EC3111FED79650016851F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		504EC3131FED79650016851F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		50B271D01FEDC1A000F3C39B /* public */ = {isa = PBXFileReference; lastKnownFileType = folder; path = public; sourceTree = "<group>"; };
 		958DCC722DB07C7200EA8C5F /* debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = debug.xcconfig; path = ../debug.xcconfig; sourceTree = SOURCE_ROOT; };
+		E2D54C9A301F7B8C00A1F001 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		E2D54C9D301F7B8C00A1F001 /* CoachingAudioSessionPlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoachingAudioSessionPlugin.swift; sourceTree = "<group>"; };
+		E2D54C9F301F7B8C00A1F001 /* AppViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppViewController.swift; sourceTree = "<group>"; };
+		E2D54CA6301F7B8C00A1F001 /* MindLiftLiveActivityPlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MindLiftLiveActivityPlugin.swift; sourceTree = "<group>"; };
+		E2D54CA7301F7B8C00A1F001 /* MindLiftWorkoutActivityAttributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MindLiftWorkoutActivityAttributes.swift; sourceTree = "<group>"; };
+		E2D54CA8301F7B8C00A1F001 /* MindLiftLiveActivityExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = MindLiftLiveActivityExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		E2D54CAA301F7B8C00A1F001 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E2D54CAB301F7B8C00A1F001 /* MindLiftLiveActivityBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MindLiftLiveActivityBundle.swift; sourceTree = "<group>"; };
+		E2D54CAC301F7B8C00A1F001 /* MindLiftLiveActivityWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MindLiftLiveActivityWidget.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -47,6 +83,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		E2D54CAE301F7B8C00A1F001 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -55,6 +98,7 @@
 			children = (
 				958DCC722DB07C7200EA8C5F /* debug.xcconfig */,
 				504EC3061FED79650016851F /* App */,
+				E2D54CA9301F7B8C00A1F001 /* MindLiftLiveActivityExtension */,
 				504EC3051FED79650016851F /* Products */,
 			);
 			sourceTree = "<group>";
@@ -63,6 +107,7 @@
 			isa = PBXGroup;
 			children = (
 				504EC3041FED79650016851F /* App.app */,
+				E2D54CA8301F7B8C00A1F001 /* MindLiftLiveActivityExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -75,6 +120,8 @@
 				504EC3071FED79650016851F /* AppDelegate.swift */,
 				E2D54C9F301F7B8C00A1F001 /* AppViewController.swift */,
 				E2D54C9D301F7B8C00A1F001 /* CoachingAudioSessionPlugin.swift */,
+				E2D54CA6301F7B8C00A1F001 /* MindLiftLiveActivityPlugin.swift */,
+				E2D54CA7301F7B8C00A1F001 /* MindLiftWorkoutActivityAttributes.swift */,
 				E2D54C9A301F7B8C00A1F001 /* SceneDelegate.swift */,
 				504EC30B1FED79650016851F /* Main.storyboard */,
 				504EC30E1FED79650016851F /* Assets.xcassets */,
@@ -84,6 +131,16 @@
 				50B271D01FEDC1A000F3C39B /* public */,
 			);
 			path = App;
+			sourceTree = "<group>";
+		};
+		E2D54CA9301F7B8C00A1F001 /* MindLiftLiveActivityExtension */ = {
+			isa = PBXGroup;
+			children = (
+				E2D54CAA301F7B8C00A1F001 /* Info.plist */,
+				E2D54CAB301F7B8C00A1F001 /* MindLiftLiveActivityBundle.swift */,
+				E2D54CAC301F7B8C00A1F001 /* MindLiftLiveActivityWidget.swift */,
+			);
+			path = MindLiftLiveActivityExtension;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -96,10 +153,12 @@
 				504EC3001FED79650016851F /* Sources */,
 				504EC3011FED79650016851F /* Frameworks */,
 				504EC3021FED79650016851F /* Resources */,
+				E2D54CB0301F7B8C00A1F001 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				E2D54CB6301F7B8C00A1F001 /* PBXTargetDependency */,
 			);
 			name = App;
 			packageProductDependencies = (
@@ -108,6 +167,23 @@
 			productName = App;
 			productReference = 504EC3041FED79650016851F /* App.app */;
 			productType = "com.apple.product-type.application";
+		};
+		E2D54CB1301F7B8C00A1F001 /* MindLiftLiveActivityExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E2D54CB2301F7B8C00A1F001 /* Build configuration list for PBXNativeTarget "MindLiftLiveActivityExtension" */;
+			buildPhases = (
+				E2D54CAD301F7B8C00A1F001 /* Sources */,
+				E2D54CAE301F7B8C00A1F001 /* Frameworks */,
+				E2D54CAF301F7B8C00A1F001 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MindLiftLiveActivityExtension;
+			productName = MindLiftLiveActivityExtension;
+			productReference = E2D54CA8301F7B8C00A1F001 /* MindLiftLiveActivityExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
 
@@ -121,6 +197,9 @@
 					504EC3031FED79650016851F = {
 						CreatedOnToolsVersion = 9.2;
 						LastSwiftMigration = 1100;
+					};
+					E2D54CB1301F7B8C00A1F001 = {
+						CreatedOnToolsVersion = 15.0;
 					};
 				};
 			};
@@ -141,6 +220,7 @@
 			projectRoot = "";
 			targets = (
 				504EC3031FED79650016851F /* App */,
+				E2D54CB1301F7B8C00A1F001 /* MindLiftLiveActivityExtension */,
 			);
 		};
 /* End PBXProject section */
@@ -160,6 +240,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		E2D54CAF301F7B8C00A1F001 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -170,11 +257,31 @@
 				504EC3081FED79650016851F /* AppDelegate.swift in Sources */,
 				E2D54C9E301F7B8C00A1F001 /* AppViewController.swift in Sources */,
 				E2D54C9C301F7B8C00A1F001 /* CoachingAudioSessionPlugin.swift in Sources */,
+				E2D54CA0301F7B8C00A1F001 /* MindLiftLiveActivityPlugin.swift in Sources */,
+				E2D54CA1301F7B8C00A1F001 /* MindLiftWorkoutActivityAttributes.swift in Sources */,
 				E2D54C9B301F7B8C00A1F001 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		E2D54CAD301F7B8C00A1F001 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E2D54CA2301F7B8C00A1F001 /* MindLiftWorkoutActivityAttributes.swift in Sources */,
+				E2D54CA3301F7B8C00A1F001 /* MindLiftLiveActivityBundle.swift in Sources */,
+				E2D54CA4301F7B8C00A1F001 /* MindLiftLiveActivityWidget.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		E2D54CB6301F7B8C00A1F001 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E2D54CB1301F7B8C00A1F001 /* MindLiftLiveActivityExtension */;
+			targetProxy = E2D54CB5301F7B8C00A1F001 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		504EC30B1FED79650016851F /* Main.storyboard */ = {
@@ -355,6 +462,66 @@
 			};
 			name = Release;
 		};
+		E2D54CB3301F7B8C00A1F001 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 958DCC722DB07C7200EA8C5F /* debug.xcconfig */;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = CA82SN59M3;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = MindLiftLiveActivityExtension/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.6;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				OTHER_SWIFT_FLAGS = "$(inherited) \"-D\" \"COCOAPODS\" \"-DDEBUG\"";
+				PRODUCT_BUNDLE_IDENTIFIER = com.dev.mindlift.app.MindLiftLiveActivityExtension;
+				PRODUCT_BUNDLE_PACKAGE_TYPE = "XPC!";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				WRAPPER_EXTENSION = appex;
+			};
+			name = Debug;
+		};
+		E2D54CB4301F7B8C00A1F001 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = CA82SN59M3;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = MindLiftLiveActivityExtension/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.6;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.dev.mindlift.app.MindLiftLiveActivityExtension;
+				PRODUCT_BUNDLE_PACKAGE_TYPE = "XPC!";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				WRAPPER_EXTENSION = appex;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -372,6 +539,15 @@
 			buildConfigurations = (
 				504EC3171FED79650016851F /* Debug */,
 				504EC3181FED79650016851F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E2D54CB2301F7B8C00A1F001 /* Build configuration list for PBXNativeTarget "MindLiftLiveActivityExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E2D54CB3301F7B8C00A1F001 /* Debug */,
+				E2D54CB4301F7B8C00A1F001 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

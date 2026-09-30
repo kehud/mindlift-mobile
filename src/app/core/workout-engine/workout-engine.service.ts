@@ -29,6 +29,12 @@ interface CueProcessingResult {
 
 const WORKOUT_ENGINE_TICK_INTERVAL_MS = 1000;
 
+export interface WorkoutEngineRestoreOptions {
+  status: 'running' | 'paused';
+  elapsedSeconds: number;
+  restoredAt?: Date;
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -96,6 +102,45 @@ export class WorkoutEngineService implements OnDestroy {
     });
     this.startTicking();
     this.processTick();
+  }
+
+  restore(timeline: WorkoutTimeline, options: WorkoutEngineRestoreOptions): void {
+    this.stopTicking();
+    this.cueEventsState.set([]);
+
+    const restoredAt = options.restoredAt ?? new Date();
+    const elapsedSeconds = this.clampElapsedSeconds(timeline, options.elapsedSeconds);
+    const activeStep = this.getCurrentStep(timeline, elapsedSeconds);
+    const processedCueIds = timeline.cues
+      .filter((cue) => cue.offsetSeconds < elapsedSeconds)
+      .map((cue) => cue.id);
+
+    this.runtimeState.set({
+      timelineId: timeline.id,
+      timeline,
+      status: options.status,
+      activeStepId: activeStep?.id ?? null,
+      activeCueId: null,
+      activeAudioId: null,
+      activeBoostId: null,
+      elapsedSeconds,
+      remainingSeconds: this.getRemainingSeconds(timeline, elapsedSeconds),
+      startedAt: null,
+      pausedAt: options.status === 'paused' ? restoredAt : null,
+      resumedAt: options.status === 'running' ? restoredAt : null,
+      completedAt: null,
+      completionReason: null,
+      processedCueIds,
+      playedCueIds: [],
+      missedCueIds: processedCueIds,
+      playedAudioIds: [],
+      completedStepIds: [],
+    });
+
+    if (options.status === 'running') {
+      this.startTicking();
+      this.processTick();
+    }
   }
 
   pause(): void {

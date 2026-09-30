@@ -30,6 +30,7 @@ export class SummaryPage {
   }
 
   async done(): Promise<void> {
+    await this.workoutSessionService.dismissLiveActivity();
     this.workoutSessionService.clearSession();
     this.workoutSetupState.reset();
 
